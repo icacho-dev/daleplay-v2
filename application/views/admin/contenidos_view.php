@@ -49,9 +49,6 @@
               <div class="row">
                 <section class="col col-6" ng-if="selected_categoria.PK_Contenido">
                   <label class="label">Subir archivo(s) <strong>MP3</strong></label>
-                  <div id="progress_bar2" class="ui-progress-bar ui-container" ng-show="progress > 0">
-                    <div class="ui-progress two" style="width: {{progress}}%; overflow: hidden;"><span class="ui-label" style="display: block;"><b class="value">{{progress}}%</b></span></div>
-                  </div>
                   <!-- <div class="label" ng-repeat="file in files">
                       Archivo: {{file.name}}, Upload: <strong>{{file.progress}}</strong>%
                       <div class="divider_line12"></div>
@@ -64,7 +61,9 @@
                     tipo: {{ file.type }}
                   </div>
                   <footer ng-repeat-end>
-                    Upload: <strong>{{file.progress}}</strong>%
+                    <div class="ui-progress-bar ui-container" ng-show="file.progress > 0">
+                      <div class="ui-progress two" style="width: {{file.progress}}%; overflow: hidden;"><span class="ui-label" style="display: block;"><b class="value">{{file.progress}}%</b></span></div>
+                    </div>
                   </footer>
                   <div class="divider_line7"></div>
                   <div class="button btn_action1"
