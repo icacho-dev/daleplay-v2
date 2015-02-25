@@ -29,7 +29,7 @@ angular.module('App',[
       .otherwise({
         templateUrl: '/ci22/adminpanel_controller/dashboard'
       });
-			
+
       $locationProvider.html5Mode(true);
 }])
 .controller('DashboardController', ['$route', '$routeParams', '$location', '$scope',
@@ -37,7 +37,7 @@ angular.module('App',[
     this.$route = $route;
     this.$location = $location;
     this.$routeParams = $routeParams;
-    $scope.titulo = 'Dashboardss';
+    $scope.titulo = 'Dashboard';
     console.info('ini DashboardController');
 
     $scope.go = function(newtitulo,path) {
