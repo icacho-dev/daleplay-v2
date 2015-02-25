@@ -62,12 +62,10 @@
                   <header ng-repeat-start="file in files">
                     Archivo {{$index+1}}
                   </header>
-                  <div class="body dp_uploader_filedesc">
+                  <div class="body dp_uploader_filedesc dp_uploader_filedesc_bar">
                     <span class="dp_uploader_filedesc_alt">nombre: </span>{{ file.name }}&nbsp;
                     <span class="dp_uploader_filedesc_alt">tipo: </span>{{ file.type }}&nbsp;
-                    <span class="dp_uploader_filedesc_alt">tamaño: </span>{{ file.size/1048576 | number:2 }} MB&nbsp;
-                    <hr/>
-                    <!-- <pre>{{file}}</pre> -->
+                    <span class="dp_uploader_filedesc_alt">tamaño: </span>{{ file.size/1048576 | number:2 }} MB
                   </div>
                   <footer ng-repeat-end>
                     <div class="ui-progress-bar ui-container" ng-show="file.progress > 0">
@@ -78,7 +76,7 @@
                 <section class="col col-6">
                   <div class="row">
                     <section class="col">
-                      xx
+                      &nbsp;
                     </section>
                   </div>
                 </section>
