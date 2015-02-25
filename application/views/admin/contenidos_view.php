@@ -59,19 +59,13 @@
                       <div class="button" ng-click="upload(files)" ng-if="files.length > 0">Subir...</div>
                     </section>
                   </div>
-                  <header ng-repeat-start="file in files">
-                    Archivo {{$index+1}}
-                  </header>
-                  <div class="body dp_uploader_filedesc dp_uploader_filedesc_bar">
+                  <div class="body dp_uploader_filedesc dp_uploader_filedesc_bar" ng-repeat="file in files">
+                    <i class="fa fa-music" style="color: #E54C4C;"></i>&nbsp;&nbsp;
                     <span class="dp_uploader_filedesc_alt">nombre: </span>{{ file.name }}&nbsp;
                     <span class="dp_uploader_filedesc_alt">tipo: </span>{{ file.type }}&nbsp;
                     <span class="dp_uploader_filedesc_alt">tamaño: </span>{{ file.size/1048576 | number:2 }} MB
+                    <div class="ui-progress-bar ui-container" ng-show="file.progress > 0"><div class="ui-progress" style="width: {{file.progress}}%;"></div></div>
                   </div>
-                  <footer ng-repeat-end>
-                    <div class="ui-progress-bar ui-container" ng-show="file.progress > 0">
-                      <div class="ui-progress two" style="width: {{file.progress}}%; overflow: hidden;"><span class="ui-label" style="display: block;"><b class="value">{{file.progress}}%</b></span></div>
-                    </div>
-                  </footer>
                 </section>
                 <section class="col col-6">
                   <div class="row">
