@@ -4664,3 +4664,13 @@ div.tab-pane.ng-scope.active{
 	font-weight: 600;
 	color: #9E9E9E;
 }
+
+.dp_uploader_filedesc {
+	font-size: smaller;
+	color: #727276;
+}
+
+.dp_uploader_filedesc_alt {
+	font-weight: bold;
+	color: #B2C676;
+}

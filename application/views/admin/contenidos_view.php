@@ -49,41 +49,42 @@
               <div class="row">
                 <section class="col col-6" ng-if="selected_categoria.PK_Contenido">
                   <label class="label">Subir archivo(s) <strong>MP3</strong></label>
-                  <!-- <div class="label" ng-repeat="file in files">
-                      Archivo: {{file.name}}, Upload: <strong>{{file.progress}}</strong>%
-                      <div class="divider_line12"></div>
-                  </div> -->
+                  <div class="row">
+                    <section class="col">
+                      <div class="button btn_action1"
+                        ng-multiple="true"
+                        ng-model="files"
+                        ng-file-select ng-accept="'audio/mp3'"
+                        ><i class="fa fa-plus fa-lg"></i>&nbsp;Selecciona...</div>
+                      <div class="button" ng-click="upload(files)" ng-if="files.length > 0">Subir...</div>
+                    </section>
+                  </div>
                   <header ng-repeat-start="file in files">
                     Archivo {{$index+1}}
                   </header>
-                  <div class="body">
-                    nombre: {{ file.name }}<br/>
-                    tipo: {{ file.type }}
+                  <div class="body dp_uploader_filedesc">
+                    <span class="dp_uploader_filedesc_alt">nombre: </span>{{ file.name }}&nbsp;
+                    <span class="dp_uploader_filedesc_alt">tipo: </span>{{ file.type }}&nbsp;
+                    <span class="dp_uploader_filedesc_alt">tamaño: </span>{{ file.size/1048576 | number:2 }} MB&nbsp;
+                    <hr/>
+                    <!-- <pre>{{file}}</pre> -->
                   </div>
                   <footer ng-repeat-end>
                     <div class="ui-progress-bar ui-container" ng-show="file.progress > 0">
                       <div class="ui-progress two" style="width: {{file.progress}}%; overflow: hidden;"><span class="ui-label" style="display: block;"><b class="value">{{file.progress}}%</b></span></div>
                     </div>
                   </footer>
-                  <div class="divider_line7"></div>
-                  <div class="button btn_action1"
-                    ng-multiple="true"
-                    ng-model="files"
-                    ng-file-select ng-accept="'audio/mp3'"
-                    ><i class="fa fa-plus fa-lg"></i>&nbsp;Selecciona...</div>
-                  <div class="button" ng-click="upload(files)" ng-if="files.length > 0">Subir...</div>
-                  <div class="label">
-                    <pre>files: {{ files | json }}</pre>
-                  </div>
                 </section>
                 <section class="col col-6">
-                  <pre>progressArray: {{ progressArray | json }}</pre>
-                  <p>selected_categoria: {{ selected_categoria | json }}</p>
+                  <div class="row">
+                    <section class="col">
+                      xx
+                    </section>
+                  </div>
                 </section>
               </div>
             </tab>
           </tabset>
-
         </fieldset>
 
         <footer>
