@@ -4655,5 +4655,12 @@ div.tab-pane.ng-scope.active{
 }
 
 .btn_action1 {
-	background-color: #4CD4E5;
+	background-color: #4CD4E5 !important;
+	margin-right: 10px !important;
+}
+
+.legend_type1 {
+	font-size: smaller;
+	font-weight: 600;
+	color: #9E9E9E;
 }

@@ -48,12 +48,38 @@
               </section>
               <div class="row">
                 <section class="col col-6" ng-if="selected_categoria.PK_Contenido">
-                  <label class="label">Audio <span ng-show="progress > 0">{{progress}}</span></label>
-                  <div class="button" ng-file-select ng-accept="'audio/mpeg'" ng-model="files"><i class="fa fa-plus fa-lg"></i>&nbsp;Selecciona...</div>
+                  <label class="label">Subir archivo(s) <strong>MP3</strong></label>
+                  <div id="progress_bar2" class="ui-progress-bar ui-container" ng-show="progress > 0">
+                    <div class="ui-progress two" style="width: {{progress}}%; overflow: hidden;"><span class="ui-label" style="display: block;"><b class="value">{{progress}}%</b></span></div>
+                  </div>
+                  <!-- <div class="label" ng-repeat="file in files">
+                      Archivo: {{file.name}}, Upload: <strong>{{file.progress}}</strong>%
+                      <div class="divider_line12"></div>
+                  </div> -->
+                  <header ng-repeat-start="file in files">
+                    Archivo {{$index+1}}
+                  </header>
+                  <div class="body">
+                    nombre: {{ file.name }}<br/>
+                    tipo: {{ file.type }}
+                  </div>
+                  <footer ng-repeat-end>
+                    Upload: <strong>{{file.progress}}</strong>%
+                  </footer>
+                  <div class="divider_line7"></div>
+                  <div class="button btn_action1"
+                    ng-multiple="true"
+                    ng-model="files"
+                    ng-file-select ng-accept="'audio/mp3'"
+                    ><i class="fa fa-plus fa-lg"></i>&nbsp;Selecciona...</div>
                   <div class="button" ng-click="upload(files)" ng-if="files.length > 0">Subir...</div>
+                  <div class="label">
+                    <pre>files: {{ files | json }}</pre>
+                  </div>
                 </section>
                 <section class="col col-6">
-                  {{selected_categoria | json}}
+                  <pre>progressArray: {{ progressArray | json }}</pre>
+                  <p>selected_categoria: {{ selected_categoria | json }}</p>
                 </section>
               </div>
             </tab>

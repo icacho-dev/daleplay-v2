@@ -75,6 +75,9 @@
 <script type="text/javascript" src="<?php echo base_url();?>js/mainmenu/sticky-6.js"></script>
 <script type="text/javascript" src="<?php echo base_url();?>js/mainmenu/modernizr.custom.75180.js"></script>
 
+<!-- progress bar -->
+<script src="<?php echo base_url();?>js/progressbar/progress.js" type="text/javascript" charset="utf-8"></script>
+
 <!--
 <script type="text/javascript" src="<?php echo base_url();?>js/universal/custom.js"></script>
 -->
