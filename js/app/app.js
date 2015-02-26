@@ -6,44 +6,58 @@ angular.module('App',[
 	'angularFileUpload',
 	'Controllers'
 	])
-.config(['$routeProvider', '$locationProvider',
-  function($routeProvider, $locationProvider) {
-		console.info('config $routeProvider='+$routeProvider+' $locationProvider='+$locationProvider);
-		$routeProvider
-      .when('/ci22/categorias_controller', {
-        templateUrl: '/ci22/categorias_controller',
-        controller: 'Categoriasv2Controller'
-      })
-      .when('/ci22/idiomas_controller', {
-        templateUrl: '/ci22/idiomas_controller',
-        controller: 'IdiomasController'
-      })
-      .when('/ci22/contenidos_controller', {
-        templateUrl: '/ci22/contenidos_controller',
-        controller: 'ContenidosController'
-      })
-      .when('/ci22/usuario_controller', {
-        templateUrl: '/ci22/usuario_controller',
-        /*controller: 'UsuariosController'*/
-      })
-      .otherwise({
-        templateUrl: '/ci22/adminpanel_controller/dashboard'
-      });
+	.config(function($stateProvider, $urlRouterProvider){
 
-      $locationProvider.html5Mode(true);
-}])
-.controller('DashboardController', ['$route', '$routeParams', '$location', '$scope',
-  function($route, $routeParams, $location, $scope) {
-    this.$route = $route;
-    this.$location = $location;
-    this.$routeParams = $routeParams;
-    $scope.titulo = 'Dashboard';
-    console.info('ini DashboardController');
+
+			$urlRouterProvider.otherwise('/Dashboard');
+			$stateProvider
+
+	        // HOME STATES AND NESTED VIEWS ========================================
+	        .state('Dashboard', {
+	            url: '/Dashboard',
+							templateUrl: '/ci22/adminpanel_controller/dashboard'
+	        })
+					.state('Categorias', {
+	            url: '/Categorias',
+							templateUrl: '/ci22/categorias_controller',
+							controller: 'Categoriasv2Controller'
+	        })
+					.state('Idiomas', {
+	            url: '/Idiomas',
+							templateUrl: '/ci22/idiomas_controller',
+							controller: 'IdiomasController'
+	        })
+					.state('Contenidos', {
+	            url: '/Contenidos',
+							templateUrl: '/ci22/contenidos_controller',
+							controller: 'ContenidosController'
+	        })
+					.state('Usuarios', {
+	            url: '/Usuarios',
+							templateUrl: '/ci22/usuario_controller',
+							controller: 'UsuariosController'
+	        })
+					;
+})
+.controller('DashboardController',
+  function($scope,$location) {
+
+		console.info('ini DashboardController ');
+		
+		$scope.titulo = 'Dashboard';
+		var path = $location.path();
+		switch(path)
+		{
+			case '/Categorias': $scope.titulo = 'Categorias';break;
+			case '/Idiomas': $scope.titulo = 'Idiomas';break;
+			case '/Contenidos': $scope.titulo = 'Contenidos';break;
+			case '/Usuarios': $scope.titulo = 'Usuarios';break;
+		}
 
     $scope.go = function(newtitulo,path) {
     	$scope.titulo = newtitulo;
     	console.info(path);
-    	$location.path( path );
+			$location.path( path );
   	}
-}])
+})
 ;

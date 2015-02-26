@@ -12,7 +12,6 @@ class Usuario_controller extends CI_Controller {
 	public function index()
 	{
 		$data['main_content'] = 'admin/usuario_view';
-		$data['usuarios'] = $this->Usuario_model->get_Usuario();
 		$this->load->view('admin/usuario_view');
 	}
 	//SELECT

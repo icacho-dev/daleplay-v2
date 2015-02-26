@@ -24,12 +24,12 @@
 
 	      <div id="navbar-collapse-1" class="navbar-collapse collapse pull-right">
 
-	        <ul class="nav navbar-nav">
-		        <li><a ng-click="go('Dashboard','/ci22/adminpanel_controller')" title="Home" class="">Dashboard</a><li>
-		        <li><a ng-click="go('Categorias','/ci22/categorias_controller')" title="Categorias" class="">Categorias</a><li>
-		        <li><a ng-click="go('Idiomas','/ci22/idiomas_controller')" title="Idiomas" class="">Idiomas</a><li>
-		        <li><a ng-click="go('Contenidos','/ci22/contenidos_controller')" title="Contenidos" class="">Contenidos</a><li>
-            <li><a ng-click="go('Usuarios','/ci22/usuario_controller')" title="Usuarios" class="">Usuarios</a><li>
+          <ul class="nav navbar-nav">
+		        <li><a ng-click="go('Dashboard','/Dashboard')" title="Home" class="">Dashboard</a><li>
+		        <li><a ng-click="go('Categorias','/Categorias')" title="Categorias" class="">Categorias</a><li>
+		        <li><a ng-click="go('Idiomas','/Idiomas')" title="Idiomas" class="">Idiomas</a><li>
+		        <li><a ng-click="go('Contenidos','/Contenidos')" title="Contenidos" class="">Contenidos</a><li>
+            <li><a ng-click="go('Usuarios','/Usuarios')" title="Usuarios" class="">Usuarios</a><li>
 	        </ul>
 
 	      </div>
