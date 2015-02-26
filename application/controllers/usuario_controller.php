@@ -42,6 +42,7 @@ class Usuario_controller extends CI_Controller {
 				'Telefono' => isset($data['Telefono']) ? $data['Telefono'] : '',
 				'EsAdmin' =>  isset($data['EsAdmin']) ? $data['EsAdmin'] : 'false',
 				'Password' => $data['Password'] ,
+				'UsuarioActivo' => isset($data['UsuarioActivo']) ? $data['UsuarioActivo'] : 'false',
 			),
 			'errors' => array(),
 			'op' => true

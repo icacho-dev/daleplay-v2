@@ -440,15 +440,29 @@ angular.module('Controllers', [])
 
   //REFRESH
   $scope.refresh = function() {
+
+    $scope.clean();
     UsuariosService.getTable().then(function(d) {
       $scope.usuarios = d.data;
-
-      if ($scope.skyform != undefined)
-        $scope.skyform.$setPristine();
-
     });
-    $scope.usuario = {};
   };
+
+  $scope.clean = function(){
+    $scope.usuario = {};
+
+    $scope.usuario.UserName = "";
+    $scope.usuario.Password = "";
+    $scope.usuario.ConfirmaPassword = "";
+    $scope.usuario.Email = "";
+    $scope.usuario.Telefono = "";
+
+    if ($scope.skyform != undefined)
+    {
+      $scope.skyform.$setPristine(true);
+      $scope.skyform.confirmapassword.$invalid=false;
+      $scope.skyform.confirmapassword.$valid=true;
+    }
+  }
 
 	//SELECT ID
 	$scope.edit = function (usuario) {
@@ -457,6 +471,10 @@ angular.module('Controllers', [])
 
 	$scope.EsAdmin = function (b) {
     return b == 'true' ? 'ADMIN' :'USER'
+  }
+
+	$scope.UsuarioActivo = function (b) {
+    return b == 'true' ? 'ACTIVO' :'INACTIVO'
   }
 
   //INSERT
@@ -474,8 +492,7 @@ angular.module('Controllers', [])
           }
         }
         if(insert) $scope.usuarios.push(result)
-        $scope.usuario = {};
-        $scope.skyform.$setPristine();
+        $scope.clean();
       } else {
         // ver que pedo con los response.data.errors
       }
@@ -502,4 +519,35 @@ angular.module('Controllers', [])
   $scope.refresh();
 
 })
+.directive("passwordVerify", function() {
+   return {
+      require: "ngModel",
+      scope: {
+        passwordVerify: '='
+      },
+      link: function(scope, element, attrs, ctrl) {
+        scope.$watch(function() {
+            var combined;
+
+            if (scope.passwordVerify || ctrl.$viewValue) {
+               combined = scope.passwordVerify + '_' + ctrl.$viewValue;
+            }
+            return combined;
+        }, function(value) {
+            if (value) {
+                ctrl.$parsers.unshift(function(viewValue) {
+                    var origin = scope.passwordVerify;
+                    if (origin !== viewValue) {
+                        ctrl.$setValidity("passwordVerify", false);
+                        return undefined;
+                    } else {
+                        ctrl.$setValidity("passwordVerify", true);
+                        return viewValue;
+                    }
+                });
+            }
+        });
+     }
+   }
+ });
 ;
