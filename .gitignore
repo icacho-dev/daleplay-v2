@@ -11,3 +11,4 @@ application/logs/*
 application/config/config.php
 *.ftpconfig
 .ftpconfig
+application/config/config.php

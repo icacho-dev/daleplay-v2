@@ -260,7 +260,7 @@ angular.module('Controllers', [])
           var r = {
             FK_Contenido : $scope.selected_categoria.PK_Contenido,
             FK_Idioma : $scope.selected_categoria.list_idioma[0].FK_Idioma,
-            Nombre : config.file.name            
+            Nombre : config.file.name
           };
 
           $scope.progress = 0;
@@ -420,6 +420,16 @@ angular.module('Controllers', [])
   this.getTable = function() {
     return $http.get('usuario_controller/get_usuarios');
   };
+  //INSERT
+  this.save = function (usuario) {
+    console.info(usuario);
+      return $http.post('usuario_controller/save_usuario',usuario);
+  };
+  //DELETE
+  this.delete = function (id)
+  {
+    return $http.post('usuario_controller/delete_usuario',id);
+  }
 })
 .controller('UsuariosController', function($scope, $http, $location, UsuariosService) {
 
@@ -439,6 +449,55 @@ angular.module('Controllers', [])
     });
     $scope.usuario = {};
   };
+
+	//SELECT ID
+	$scope.edit = function (usuario) {
+		$scope.usuario = usuario;
+  }
+
+	$scope.EsAdmin = function (b) {
+    return b == 'true' ? 'ADMIN' :'USER'
+  }
+
+  //INSERT
+  $scope.save = function () {
+    UsuariosService.save($scope.usuario).then(function(response){
+      console.info(response.data);
+      if(response.data.op)
+      {
+        var result = response.data.result;
+        var insert = true;
+        for (i in $scope.usuarios) {
+          if($scope.usuarios[i].PK_Usuario == result.PK_Usuario){
+            $scope.usuarios[i] = result;
+            insert = false;
+          }
+        }
+        if(insert) $scope.usuarios.push(result)
+        $scope.usuario = {};
+        $scope.skyform.$setPristine();
+      } else {
+        // ver que pedo con los response.data.errors
+      }
+    });
+  }
+	//DELETE
+	$scope.delete = function (usuario) {
+    UsuariosService.delete(usuario.PK_Usuario).then(function(response){
+	  if(response.data.op)
+		{
+				var result = response.data.result;
+				for (i in $scope.usuarios) {
+					if ($scope.usuarios[i].PK_Usuario == result.PK_Usuario) {
+	                	$scope.usuarios.splice(i, 1);
+	            	}
+				}
+			} else {
+				// ver que pedo con los response.data.errors
+			}
+        });
+  }
+
   // LOAD DATA
   $scope.refresh();
 

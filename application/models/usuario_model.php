@@ -19,6 +19,26 @@ class Usuario_model extends CI_Model {
 	{
 	   return $this->db->get('Usuario')->result_array();
 	}
+
+	function insert_usuario($data)
+	{
+		$this->db->insert('Usuario', $data);
+		return $this->db->insert_id() ;
+	}
+
+	function edit_usuario($data , $id)
+	{
+		$this->db->where('PK_Usuario', $id);
+		$this->db->update('Usuario', $data);
+		return $id;
+	}
+
+	function delete_usuario($id)
+	{
+		$this->db->where('PK_Usuario', $id);
+		$this->db->delete('Usuario');
+	return true;
+	}
 }
 
 /* End of file Idioma_model.php */

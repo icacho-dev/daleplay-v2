@@ -14,10 +14,64 @@ class Usuario_controller extends CI_Controller {
 		$data['main_content'] = 'admin/usuario_view';
 		$this->load->view('admin/usuario_view');
 	}
+
 	//SELECT
 	public function get_usuarios(){
 		header ('Content-type: application/json; charset=utf-8');
 		echo json_encode($this->Usuario_model->get_UsuarioAsArray());
+	}
+
+	//SELECT ID
+	public function get_usuario() {
+		$data = json_decode(file_get_contents('php://input'), true);
+
+		header ('Content-type: application/json; charset=utf-8');
+		echo json_encode($this->Usuario_model->get_UsuarioAsArray($data));
+
+	}
+
+	//INSERT
+	public function save_usuario(){
+
+		$data = json_decode(file_get_contents('php://input'), true);
+
+		$arr = array(
+			'result' => array(
+				'UserName' => $data['UserName'] ,
+				'Email' => $data['Email'] ,
+				'Telefono' => isset($data['Telefono']) ? $data['Telefono'] : '',
+				'EsAdmin' =>  isset($data['EsAdmin']) ? $data['EsAdmin'] : 'false',
+				'Password' => $data['Password'] ,
+			),
+			'errors' => array(),
+			'op' => true
+		);
+
+		$arr['result']['PK_Usuario'] =
+			(!isset($data['PK_Usuario']))
+				? $this->Usuario_model->insert_usuario($arr['result'])
+				: $this->Usuario_model->edit_usuario($arr['result'] , $data['PK_Usuario'])
+				;
+
+		echo json_encode($arr);
+
+	}
+	//DELETE
+	public function delete_usuario(){
+
+		$data = json_decode(file_get_contents('php://input'), true);
+
+		$arr = array(
+			'result' => array(
+				'PK_Usuario' => $data
+			),
+			'errors' => array(),
+		);
+
+		$arr['op']= $this->Usuario_model->delete_usuario($data);
+
+		header ('Content-type: application/json; charset=utf-8');
+		echo json_encode($arr);
 	}
 }
 
