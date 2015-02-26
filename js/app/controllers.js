@@ -1,6 +1,6 @@
 angular.module('Controllers', [])
 
-.controller('Categoriasv2Controller', function($scope, $http, $location, $routeParams) {
+.controller('Categoriasv2Controller', function($scope, $http, $location) {
 
   console.info('ini->Categoriasv2Controller');
 
@@ -10,7 +10,7 @@ angular.module('Controllers', [])
   $scope.new_categoria = {};
 
   //GET
-  $http.get('http://swfideas.com/ci22/categorias_controller/get_categorias_list').then(function(response) {
+  $http.get('categorias_controller/get_categorias_list').then(function(response) {
     $scope.categoria = angular.copy(response.data.new_categoria);
     $scope.new_categoria = angular.copy(response.data.new_categoria);
     $scope.list_categoria = response.data.list_categoria;
@@ -20,7 +20,7 @@ angular.module('Controllers', [])
   //REFRESH
   $scope.refresh = function() {
 
-    $http.get('http://swfideas.com/ci22/categorias_controller/get_categorias_list').then(function(response) {
+    $http.get('categorias_controller/get_categorias_list').then(function(response) {
       $scope.categoria = angular.copy(response.data.new_categoria);
       $scope.new_categoria = angular.copy(response.data.new_categoria);
       $scope.list_categoria = response.data.list_categoria;
@@ -39,7 +39,7 @@ angular.module('Controllers', [])
     //SAVE||UPDATE
   $scope.save = function() {
 
-      $http.post('http://swfideas.com/ci22/categorias_controller/save_categorias', $scope.categoria).then(function(response) {
+      $http.post('categorias_controller/save_categorias', $scope.categoria).then(function(response) {
 
         if (response.data.op) {
           var result = response.data.categoria;
@@ -66,7 +66,7 @@ angular.module('Controllers', [])
     //DELETE
   $scope.delete = function(categoria) {
 
-      $http.post('http://swfideas.com/ci22/categorias_controller/delete_categoria', categoria).then(function(response) {
+      $http.post('categorias_controller/delete_categoria', categoria).then(function(response) {
 
         console.log(response);
 
@@ -91,30 +91,30 @@ angular.module('Controllers', [])
 .service('ContenidosService', function($location, $http, $q) {
 
   this.delete = function(id) {
-    return $http.post($location.path() + '/delete_contenido', id);
+    return $http.post('contenidos_controller/delete_contenido', id);
   }
 
   this.get_model = function() {
 
     console.info($location.path());
 
-    return $http.get($location.path() + '/get_model');
+    return $http.get('contenidos_controller/get_model');
   };
 
   this.get_contenidos_traducciones = function() {
-    return $http.get($location.path() + '/get_contenidos_traducciones');
+    return $http.get('contenidos_controller/get_contenidos_traducciones');
   };
 
   this.save = function(contenido) {
     console.info('ContenidosService:call->save');
     console.info(contenido);
     //return true;
-    return $http.post($location.path() + '/save_contenido', contenido);
+    return $http.post('contenidos_controller/save_contenido', contenido);
   };
 
 })
 .controller('ContenidosController', function(
-  $scope, $http, $location, $routeParams, $fancyModal, $log, ContenidosService, $upload) {
+  $scope, $http, $location, $fancyModal, $log, ContenidosService, $upload) {
 
   $scope.list_categoria = {};
   $scope.selected_categoria = {};
@@ -226,9 +226,6 @@ angular.module('Controllers', [])
   $scope.files = [];
   $scope.progress = 0;
   $scope.progressArray = [];
-  $scope.uploadedArray = [];
-  $scope.uploadedSycArray = [];
-
 
   $scope.upload = function(files) {
 
@@ -256,16 +253,7 @@ angular.module('Controllers', [])
 					//regreso respuesta sobre upload, aun no confirmamos si subio
           console.log('i:' + i + ' / file ' + config.file.name);
 					console.log('i:' + i + ' / uploaded. Response: ' + data);
-
-          var r = {
-            FK_Contenido : $scope.selected_categoria.PK_Contenido,
-            FK_Idioma : $scope.selected_categoria.list_idioma[0].FK_Idioma,
-            Nombre : data.msg.file_name
-          };
-
           $scope.progress = 0;
-          $scope.uploadedArray.push(data);
-          $scope.uploadedSycArray.push(r);
           //$scope.selected_categoria.file = 'hola';
         });
       }
@@ -309,22 +297,125 @@ angular.module('Controllers', [])
 
   return alertService;
 })
+.service('IdiomasService', function ($location,$http,$q) {
+	//SELECT ----------------------------------------------------------------- IDIOMAS
+    var idiomas = {};
+
+    this.getTable = function (){
+		return $http.get('idiomas_controller/get_idiomas');
+	};
+	//SELECT ID
+	this.getItem = function (id) {
+
+		var result = {};
+
+		$http.post('idiomas_controller/get_idioma',id)
+			.then(function(response) {
+
+		        console.log(response);
+		        console.log(response.data);
+		        return response.data;
+		    },
+		    function(response) { // optional
+		        // failed
+		        result = {
+		        		insert:false
+		        	}
+		    });
+
+    }
+    //INSERT
+    this.save = function (idioma) {
+    	console.info(idioma);
+        return $http.post('idiomas_controller/save_idiomas',idioma);
+    };
+    //DELETE
+    this.delete = function (id)
+    {
+    	return $http.post('idiomas_controller/idiomas_controller/delete_idioma',id);
+    }
+})
+.controller('IdiomasController',function($scope,$http,$location,IdiomasService){
+
+	console.info('ini->IdiomasController');
+
+	$scope.idioma = {};
+	$scope.idiomas = {};
+
+ 	//REFRESH
+	$scope.refresh = function(){
+		IdiomasService.getTable().then(function(d) {
+		    $scope.idiomas = d.data;
+
+		    if($scope.skyform != undefined)
+		    	$scope.skyform.$setPristine();
+
+		});
+		$scope.idioma = {};
+	};
+
+	//SELECT ID
+	$scope.edit = function (idioma) {
+		$scope.idioma = idioma;
+    }
+
+	//INSERT
+	$scope.save = function () {
+		IdiomasService.save($scope.idioma).then(function(response){
+			console.info(response.data);
+			if(response.data.op)
+			{
+				var result = response.data.result;
+				var insert = true;
+				for (i in $scope.idiomas) {
+					if($scope.idiomas[i].PK_Idioma == result.PK_Idioma){
+						$scope.idiomas[i] = result;
+						insert = false;
+					}
+				}
+				if(insert) $scope.idiomas.push(result)
+				$scope.idioma = {};
+				$scope.skyform.$setPristine();
+			} else {
+				// ver que pedo con los response.data.errors
+			}
+		});
+	}
+	//DELETE
+	$scope.delete = function (idioma) {
+        IdiomasService.delete(idioma.PK_Idioma).then(function(response){
+	        if(response.data.op)
+			{
+				var result = response.data.result;
+				for (i in $scope.idiomas) {
+					if ($scope.idiomas[i].PK_Idioma == result.PK_Idioma) {
+	                	$scope.idiomas.splice(i, 1);
+	            	}
+				}
+			} else {
+				// ver que pedo con los response.data.errors
+			}
+        });
+    }
+    // LOAD DATA
+    $scope.refresh();
+
+})
 .service('UsuariosService', function($location, $http, $q) {
   //SELECT ----------------------------------------------------------------- USUARIOS
   var usuarios = {};
 
   this.getTable = function() {
-    return $http.get($location.path() + '/get_usuarios');
+    return $http.get('usuario_controller/get_usuarios');
   };
 })
-.controller('UsuariosController', function($scope, $http, $location, $routeParams, UsuariosService) {
+.controller('UsuariosController', function($scope, $http, $location, UsuariosService) {
 
   console.info('ini->UsuariosController');
 
   $scope.usuario = {};
   $scope.usuarios = {};
 
-  $scope.$parent.$parent.titulo = $routeParams.titulo;
   //REFRESH
   $scope.refresh = function() {
     UsuariosService.getTable().then(function(d) {
@@ -339,4 +430,5 @@ angular.module('Controllers', [])
   // LOAD DATA
   $scope.refresh();
 
-});
+})
+;
