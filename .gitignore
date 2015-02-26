@@ -9,3 +9,4 @@ application/logs/*
 !application/logs/.htaccess
 .htaccess
 application/config/config.php
+*.ftpconfig
