@@ -47,10 +47,10 @@
                 </label>
               </section>
               <div class="row">
-                <section class="col" ng-if="selected_categoria.PK_Contenido">
+                <section class="col one_full" ng-if="selected_categoria.PK_Contenido">
                   <label class="label">Subir archivo(s) <strong>MP3</strong></label>
                   <div class="row">
-                    <section class="col one_full">
+                    <section class="col">
                       <div class="button btn_action1"
                         ng-multiple="true"
                         ng-model="files"
@@ -68,6 +68,16 @@
                     <div class="ui-progress-bar ui-container animate fadeIn" ng-show="file.progress > 0 && file.progress < 100"><div class="ui-progress" style="width: {{file.progress}}%;"></div></div>
                   </div>
                 </section>
+                <!-- consola -->
+                <section class="col one_half" ng-if="selected_categoria.PK_Contenido">
+                  <pre>progressArray: {{progressArray | json}}</pre>
+                  <pre>uploadedSycArray: {{uploadedSycArray | json}}</pre>
+                </section>
+                <section class="col one_half" ng-if="selected_categoria.PK_Contenido">
+                  <pre>uploadedArray: {{uploadedArray | json}}</pre>
+                  <p>selected_categoria: {{selected_categoria | json}}</p>
+                </section>
+                <!-- /consola -->
               </div>
             </tab>
           </tabset>

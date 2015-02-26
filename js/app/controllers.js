@@ -226,6 +226,9 @@ angular.module('Controllers', [])
   $scope.files = [];
   $scope.progress = 0;
   $scope.progressArray = [];
+  $scope.uploadedArray = [];
+  $scope.uploadedSycArray = [];
+
 
   $scope.upload = function(files) {
 
@@ -253,7 +256,16 @@ angular.module('Controllers', [])
 					//regreso respuesta sobre upload, aun no confirmamos si subio
           console.log('i:' + i + ' / file ' + config.file.name);
 					console.log('i:' + i + ' / uploaded. Response: ' + data);
+
+          var r = {
+            FK_Contenido : $scope.selected_categoria.PK_Contenido,
+            FK_Idioma : $scope.selected_categoria.list_idioma[0].FK_Idioma,
+            Nombre : config.file.name            
+          };
+
           $scope.progress = 0;
+          $scope.uploadedArray.push(data);
+          $scope.uploadedSycArray.push(r);
           //$scope.selected_categoria.file = 'hola';
         });
       }
