@@ -47,10 +47,10 @@
                 </label>
               </section>
               <div class="row">
-                <section class="col col-6" ng-if="selected_categoria.PK_Contenido">
+                <section class="col" ng-if="selected_categoria.PK_Contenido">
                   <label class="label">Subir archivo(s) <strong>MP3</strong></label>
                   <div class="row">
-                    <section class="col">
+                    <section class="col one_full">
                       <div class="button btn_action1"
                         ng-multiple="true"
                         ng-model="files"
@@ -59,25 +59,13 @@
                       <div class="button" ng-click="upload(files)" ng-if="files.length > 0">Subir...</div>
                     </section>
                   </div>
-                  <header ng-repeat-start="file in files">
-                    Archivo {{$index+1}}
-                  </header>
-                  <div class="body dp_uploader_filedesc dp_uploader_filedesc_bar">
+                  <div class="body dp_uploader_filedesc dp_uploader_filedesc_bar" ng-repeat="file in files">
+                    <i class="fa fa-music" style="color: #E54C4C;"></i>&nbsp;&nbsp;
                     <span class="dp_uploader_filedesc_alt">nombre: </span>{{ file.name }}&nbsp;
                     <span class="dp_uploader_filedesc_alt">tipo: </span>{{ file.type }}&nbsp;
-                    <span class="dp_uploader_filedesc_alt">tamaño: </span>{{ file.size/1048576 | number:2 }} MB
-                  </div>
-                  <footer ng-repeat-end>
-                    <div class="ui-progress-bar ui-container" ng-show="file.progress > 0">
-                      <div class="ui-progress two" style="width: {{file.progress}}%; overflow: hidden;"><span class="ui-label" style="display: block;"><b class="value">{{file.progress}}%</b></span></div>
-                    </div>
-                  </footer>
-                </section>
-                <section class="col col-6">
-                  <div class="row">
-                    <section class="col">
-                      &nbsp;
-                    </section>
+                    <span class="dp_uploader_filedesc_alt">tamaño: </span>{{ file.size/1048576 | number:2 }} MB&nbsp;
+                    <span ng-show="file.progress > 0"><span class="dp_uploader_filedesc_alt">upload: </span>{{ file.progress}} %&nbsp;<i class="fa fa-check pull-right" style="color: #8CC544; font-size: 1.5em;" ng-show="file.progress == 100"></i></span>
+                    <div class="ui-progress-bar ui-container animate fadeIn" ng-show="file.progress > 0 && file.progress < 100"><div class="ui-progress" style="width: {{file.progress}}%;"></div></div>
                   </div>
                 </section>
               </div>

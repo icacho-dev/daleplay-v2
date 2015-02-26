@@ -4671,11 +4671,13 @@ div.tab-pane.ng-scope.active{
 }
 
 .dp_uploader_filedesc_alt {
-	font-weight: bold;
-	color: #B2C676;
+	color: #ADB0A5;
 }
 
 .dp_uploader_filedesc_bar {
-	border-bottom: 1px solid #e3e3e3;
-	padding-bottom: 10px;
+	border: 1px solid #e3e3e3;
+	border-radius: .4em;
+	padding: .5em .8em!important;
+	background: #F9F9F9;
+	margin-bottom: 1em!important;
 }
