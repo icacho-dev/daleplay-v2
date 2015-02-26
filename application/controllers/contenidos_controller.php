@@ -225,10 +225,10 @@ class Contenidos_controller extends CI_Controller {
 		$FK_Idioma = $this->input->post('FK_Idioma');
 
 		$config['upload_path'] = './uploads/';
-		$config['allowed_types'] = 'gif|jpg|png';
-		$config['max_size']	= '100';
-		$config['max_width']  = '1024';
-		$config['max_height']  = '768';
+		$config['allowed_types'] = 'mp3';
+		$config['max_size']	= '200000';//200000KB:20MB
+		$config['encrypt_name']  = true;
+
 
 		$this->load->library('upload', $config);
 
