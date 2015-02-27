@@ -132,36 +132,34 @@
 		                <td class="alicent dp_actions">
 		                	<a href="javascript:void(0)" class="smlinks" ng-click="edit(usuario)"><i class="fa fa-edit"></i> Editar</a>
 		                	<a href="javascript:void(0)" class="smlinks" ng-click="delete(usuario)"><i class="fa fa-trash-o"></i> Borrar</a>
-                      <a href="javascript:void(0)" class="smlinks" ng-click="detalle(usuario, $index)"><i class="fa fa-eye"></i> Privs</a>
+                      <a href="javascript:void(0)" class="smlinks" ng-click="detalle(usuario, $index)"><i class="fa fa-check-square-o"></i> Privilegios</a>
 		                </td>
 		            </tr>
 
                 <tr ng-show="evaluate($index)" class="animate fadeIn" style="background:#FAFAFA">
                   <td colspan="5">
-                    <div class="dp_form1">
-                      <form ng-submit="savecats()" class="sky-form">
-                        <label class="checkbox" style="background:#848787">
-                          <i class=""></i>
-                          <input type="checkbox" ng-model="selall.Selected" ng-change="changeall()" />
-                          <i class=""></i>
-                          Seleccionar Todos
-                        </label>
-                        <div class="container">
-                          <div ng-class="$index % 3 == 0 ? 'one_third last' : 'one_third'" ng-repeat="cat in categorias">
-                            <label class="checkbox">
-                              <i class=""></i>
-                              <input type="checkbox" ng-model="cat.Exist" ng-change="unselectall(cat)"
-                              ng-true-value="true" ng-false-value="false"  />
-                              <i class=""></i>
-                              {{cat.Categoria}}
-                            </label>
-                          </div>
+                    <form ng-submit="savecats()" class="sky-form">
+                      <label class="checkbox" style="font-weight:bold;">
+                        <i class=""></i>
+                        <input type="checkbox" ng-model="selall.Selected" ng-change="changeall()" />
+                        <i class=""></i>
+                        Seleccionar Todos
+                      </label>
+                      <div class="container">
+                        <div ng-class="$index % 3 == 0 ? 'one_third last' : 'one_third'" ng-repeat="cat in categorias">
+                          <label class="checkbox">
+                            <i class=""></i>
+                            <input type="checkbox" ng-model="cat.Exist" ng-change="unselectall(cat)"
+                            ng-true-value="true" ng-false-value="false"  />
+                            <i class=""></i>
+                            {{cat.Categoria}}
+                          </label>
                         </div>
-                        <footer>
-                          <input type="submit" class="button" value="Guardar"/>
-                        </footer>
-                      </form>
-                    </div>
+                      </div>
+                      <footer>
+                        <input type="submit" class="button pull-right" value="Guardar"/>
+                      </footer>
+                    </form>
                     <!-- <pre>categorias {{categorias  | json}}</pre> -->
                   </td>
                 </tr>
