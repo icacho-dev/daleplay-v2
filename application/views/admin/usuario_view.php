@@ -2,7 +2,7 @@
 <div class="content_fullwidth less2" ng-controller="UsuariosController">
 
     <div class="container">
-        <div class="one_half" >
+        <div class="one_full" >
 
             <div class="dp_form1">
                 <form
@@ -103,13 +103,14 @@
                     <input type="submit" class="button" value="Guardar"
                            ng-class="{'state-disabled' : skyform.usuario.$invalid || skyform.password.$invalid || skyform.confirmapassword.$invalid || skyform.email.$invalid }"
                            ng-disabled="skyform.usuario.$invalid || skyform.password.$invalid || skyform.confirmapassword.$invalid || skyform.email.$invalid"/>
-                    <!--<pre>skyform {{usuario  | json}}</pre>-->
+                    <!-- <pre>usuario {{usuario  | json}}</pre> -->
                 </footer>
                 </form>
             </div>
 
         </div>
-        <div class="one_half last">
+
+        <div class="one_full">
 
             <table border="0" cellpadding="4" cellspacing="0" class="table " >
 		        <thead>
@@ -122,17 +123,48 @@
 		                <th></th>
 		            </tr>
 		        </thead>
-		        <tbody>
-		            <tr ng-repeat="usuario in usuarios">
-		                <td style="width:100px;">{{ usuario.UserName }}<span class="dp_tinydetail">ID: {{ usuario.PK_Usuario }}</span></td>
+		        <tbody ng-repeat="usuario in usuarios">
+		            <tr>
+                    <td style="width:100px;">{{ usuario.UserName }}<span class="dp_tinydetail">ID: {{ usuario.PK_Usuario }}</span></td>
 		                <td>{{ usuario.Email }}</td>
                     <td><p class="dp_infolabel">{{ EsAdmin(usuario.EsAdmin) }}</p></td>
                     <td><p class="dp_infolabel">{{ UsuarioActivo(usuario.UsuarioActivo) }}</p></td>
 		                <td class="alicent dp_actions">
 		                	<a href="javascript:void(0)" class="smlinks" ng-click="edit(usuario)"><i class="fa fa-edit"></i> Editar</a>
 		                	<a href="javascript:void(0)" class="smlinks" ng-click="delete(usuario)"><i class="fa fa-trash-o"></i> Borrar</a>
+                      <a href="javascript:void(0)" class="smlinks" ng-click="detalle(usuario, $index)"><i class="fa fa-eye"></i> Privs</a>
 		                </td>
 		            </tr>
+
+                <tr ng-show="evaluate($index)" class="animate fadeIn" style="background:#FAFAFA">
+                  <td colspan="5">
+                    <div class="dp_form1">
+                      <form ng-submit="savecats()" class="sky-form">
+                        <label class="checkbox" style="background:#848787">
+                          <i class=""></i>
+                          <input type="checkbox" ng-model="selall.Selected" ng-change="changeall()" />
+                          <i class=""></i>
+                          Seleccionar Todos
+                        </label>
+                        <div class="container">
+                          <div ng-class="$index % 3 == 0 ? 'one_third last' : 'one_third'" ng-repeat="cat in categorias">
+                            <label class="checkbox">
+                              <i class=""></i>
+                              <input type="checkbox" ng-model="cat.Exist" ng-change="unselectall(cat)"
+                              ng-true-value="true" ng-false-value="false"  />
+                              <i class=""></i>
+                              {{cat.Categoria}}
+                            </label>
+                          </div>
+                        </div>
+                        <footer>
+                          <input type="submit" class="button" value="Guardar"/>
+                        </footer>
+                      </form>
+                    </div>
+                    <!-- <pre>categorias {{categorias  | json}}</pre> -->
+                  </td>
+                </tr>
 		        </tbody>
 		    </table>
 

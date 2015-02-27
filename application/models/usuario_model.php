@@ -26,6 +26,14 @@ class Usuario_model extends CI_Model {
 		return $this->db->insert_id() ;
 	}
 
+	function insert_categoria_usuario($data)
+	{
+		$this->db->trans_start();
+	  $this->db->insert_batch('Categorias_Usuario', $data);
+	  $this->db->trans_complete();
+	  return ($this->db->trans_status() === FALSE)? FALSE:TRUE;
+	}
+
 	function edit_usuario($data , $id)
 	{
 		$this->db->where('PK_Usuario', $id);
@@ -37,7 +45,24 @@ class Usuario_model extends CI_Model {
 	{
 		$this->db->where('PK_Usuario', $id);
 		$this->db->delete('Usuario');
-	return true;
+		return true;
+	}
+
+	function delete_categoria_usuario($id)
+	{
+		$this->db->where('FK_Usuario', $id);
+		$this->db->delete('Categorias_Usuario');
+		return true;
+	}
+
+	function get_CategoriaUsuarioByIdAsArray($id)
+	{
+		$this->db->select('FK_Categoria , Exist , Categoria, PK_Usuario');
+		$this->db->from('view_categorias_usuario');
+		$this->db->where('view_categorias_usuario.PK_Usuario',$id);
+
+		$query = $this->db->get();
+		return $query->result_array();
 	}
 }
 

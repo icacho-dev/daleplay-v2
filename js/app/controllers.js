@@ -415,8 +415,6 @@ angular.module('Controllers', [])
 })
 .service('UsuariosService', function($location, $http, $q) {
   //SELECT ----------------------------------------------------------------- USUARIOS
-  var usuarios = {};
-
   this.getTable = function() {
     return $http.get('usuario_controller/get_usuarios');
   };
@@ -429,7 +427,19 @@ angular.module('Controllers', [])
   this.delete = function (id)
   {
     return $http.post('usuario_controller/delete_usuario',id);
-  }
+  };
+  //DELETE
+  this.categorias = function (id)
+  {
+    console.info(id);
+    return $http.post('usuario_controller/get_categorias_usuario',id);
+  };
+  //INSERT CATEGORIAS
+  this.savecats = function(categorias) {
+    console.info('savecats');
+    console.info('savecats'+categorias);
+    return $http.post('usuario_controller/save_categoria_usuario', categorias);
+  };
 })
 .controller('UsuariosController', function($scope, $http, $location, UsuariosService) {
 
@@ -437,6 +447,7 @@ angular.module('Controllers', [])
 
   $scope.usuario = {};
   $scope.usuarios = {};
+  $scope.categorias = {};
 
   //REFRESH
   $scope.refresh = function() {
@@ -448,7 +459,9 @@ angular.module('Controllers', [])
   };
 
   $scope.clean = function(){
+
     $scope.usuario = {};
+    $scope.categorias = {};
 
     $scope.usuario.UserName = "";
     $scope.usuario.Password = "";
@@ -500,20 +513,57 @@ angular.module('Controllers', [])
   }
 	//DELETE
 	$scope.delete = function (usuario) {
-    UsuariosService.delete(usuario.PK_Usuario).then(function(response){
-	  if(response.data.op)
-		{
-				var result = response.data.result;
-				for (i in $scope.usuarios) {
-					if ($scope.usuarios[i].PK_Usuario == result.PK_Usuario) {
-	                	$scope.usuarios.splice(i, 1);
-	            	}
-				}
-			} else {
-				// ver que pedo con los response.data.errors
-			}
-        });
+    UsuariosService.delete(usuario.PK_Usuario).then(function(response)
+    {
+  	  if(response.data.op)
+  		{
+  				var result = response.data.result;
+  				for (i in $scope.usuarios) {
+  					if ($scope.usuarios[i].PK_Usuario == result.PK_Usuario) {
+  	                	$scope.usuarios.splice(i, 1);
+  	            	}
+  				}
+  		} else {
+  				// ver que pedo con los response.data.errors
+  		}
+    });
   }
+  $scope.detalle = function(usuario, index) {
+    console.info('Detalle Usuario '+index + ' PK_Usuario:' + usuario.PK_Usuario);
+    $scope.rowvisible = $scope.rowvisible == index ? -1 : index;
+    $scope.selall = {'Selected' : true};
+    UsuariosService.categorias(usuario.PK_Usuario).then(function(d) {
+      $scope.categorias = d.data;
+      $scope.selectedall();
+    });
+
+    $scope.usuariosel = usuario.PK_Usuario;
+  };
+  $scope.evaluate = function(index) {
+    return index == $scope.rowvisible;
+  };
+  $scope.changeall = function(){
+    angular.forEach($scope.categorias, function(cat) {
+      cat.Exist = $scope.selall.Selected ? "true" : "false";
+    });
+  };
+  $scope.selectedall = function(){
+    angular.forEach($scope.categorias, function(cat) {
+      if(cat.Exist == "false") $scope.selall.Selected = false;
+    });
+  };
+  $scope.unselectall = function(cat){
+    if(!(cat.Exist=="true") && $scope.selall.Selected)
+      $scope.selall.Selected = false;
+  };
+  $scope.savecats = function(){
+    console.info('savecats');
+    $scope.arrcategorias = {'categorias_list':$scope.categorias,'PK_Usuario':$scope.usuariosel};
+
+    UsuariosService.savecats($scope.arrcategorias).then(function(d) {
+      $scope.rowvisible = -1;
+    });
+  };
 
   // LOAD DATA
   $scope.refresh();

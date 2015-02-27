@@ -30,6 +30,14 @@ class Usuario_controller extends CI_Controller {
 
 	}
 
+	//SELECT CATEGORIAS BY ID DE USUARIO
+	public function get_categorias_usuario() {
+		$data = json_decode(file_get_contents('php://input'), true);
+		header ('Content-type: application/json; charset=utf-8');
+		echo json_encode($this->Usuario_model->get_CategoriaUsuarioByIdAsArray($data));
+
+	}
+
 	//INSERT
 	public function save_usuario(){
 
@@ -56,6 +64,35 @@ class Usuario_controller extends CI_Controller {
 
 		echo json_encode($arr);
 
+	}
+
+	//INSERT
+	public function save_categoria_usuario(){
+		$data = json_decode(file_get_contents('php://input'), true);
+		$list_categorias = $data['categorias_list'];
+		try{
+
+			$Arr = array();
+			foreach ($list_categorias as $categoria) {
+				if(isset($categoria['Exist']) && $categoria['Exist'] == "true") {
+					array_push($Arr, array(
+				    	'FK_Categoria' => $categoria['FK_Categoria'] ,
+				    	'FK_Usuario' => $categoria['PK_Usuario']
+					));
+				}
+			};
+
+			$this->Usuario_model->delete_categoria_usuario($data['PK_Usuario']);
+			if(count($Arr)>0 ) {
+				$this->Usuario_model->insert_categoria_usuario($Arr);
+			}
+
+		} catch (Exception $e) {
+			array_push( $arr['errors'] , $e->getMessage() );
+			throw $e;
+		}
+
+		echo 'inserted';
 	}
 	//DELETE
 	public function delete_usuario(){
