@@ -469,6 +469,8 @@ angular.module('Controllers', [])
     $scope.usuario.Email = "";
     $scope.usuario.Telefono = "";
 
+    $scope.rowvisible = -1;
+    
     if ($scope.skyform != undefined)
     {
       $scope.skyform.$setPristine(true);
