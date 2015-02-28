@@ -46,39 +46,7 @@
                   <textarea rows="15" ng-model="idioma.traduccion"></textarea>
                 </label>
               </section>
-              <div class="row">
-                <section class="col one_full" ng-if="selected_categoria.PK_Contenido">
-                  <label class="label">Subir archivo(s) <strong>MP3</strong></label>
-                  <div class="row">
-                    <section class="col">
-                      <div class="button btn_action1"
-                        ng-multiple="true"
-                        ng-model="files"
-                        ng-file-select ng-accept="'audio/mp3'"
-                        ><i class="fa fa-plus fa-lg"></i>&nbsp;Selecciona...</div>
-                      <div class="button" ng-click="upload(files)" ng-if="files.length > 0">Subir...</div>
-                    </section>
-                  </div>
-                  <div class="body dp_uploader_filedesc dp_uploader_filedesc_bar" ng-repeat="file in files">
-                    <i class="fa fa-music" style="color: #E54C4C;"></i>&nbsp;&nbsp;
-                    <span class="dp_uploader_filedesc_alt">nombre: </span>{{ file.name }}&nbsp;
-                    <span class="dp_uploader_filedesc_alt">tipo: </span>{{ file.type }}&nbsp;
-                    <span class="dp_uploader_filedesc_alt">tamaño: </span>{{ file.size/1048576 | number:2 }} MB&nbsp;
-                    <span ng-show="file.progress > 0"><span class="dp_uploader_filedesc_alt">upload: </span>{{ file.progress}} %&nbsp;<i class="fa fa-check pull-right" style="color: #8CC544; font-size: 1.5em;" ng-show="file.progress == 100"></i></span>
-                    <div class="ui-progress-bar ui-container animate fadeIn" ng-show="file.progress > 0 && file.progress < 100"><div class="ui-progress" style="width: {{file.progress}}%;"></div></div>
-                  </div>
-                </section>
-                <!-- consola -->
-                <section class="col one_half" ng-if="selected_categoria.PK_Contenido">
-                  <pre>progressArray: {{progressArray | json}}</pre>
-                  <pre>uploadedSycArray: {{uploadedSycArray | json}}</pre>
-                </section>
-                <section class="col one_half" ng-if="selected_categoria.PK_Contenido">
-                  <pre>uploadedArray: {{uploadedArray | json}}</pre>
-                  <p>selected_categoria: {{selected_categoria | json}}</p>
-                </section>
-                <!-- /consola -->
-              </div>
+
             </tab>
           </tabset>
         </fieldset>
@@ -133,8 +101,8 @@
             <th></th>
           </tr>
         </thead>
-        <tbody>
-          <tr ng-repeat="contenido in contenidos_traducciones">
+        <tbody ng-repeat="contenido in contenidos_traducciones">
+          <tr>
             <td>
               <p class="dp_infolabel ng-binding">
                 {{contenido.Label}}
@@ -151,8 +119,83 @@
               <a href="javascript:void(0)" class="smlinks" ng-click="edit(contenido)"><i class="fa fa-edit"></i> Editar</a>
               <a href="javascript:void(0)" class="smlinks" ng-click="delete(contenido)"><i class="fa fa-trash-o"></i> Borrar</a>
               <a href="javascript:void(0)" class="smlinks" ng-click="modalAndCtrl(contenido)"><i class="fa fa-eye"></i> Ver</a>
+              <a href="javascript:void(0)" class="smlinks" ng-click="detalle(contenido, $index)"><i class="fa fa-check-square-o"></i> Audio</a>
             </td>
           </tr>
+          <!-- audios -->
+          <tr ng-show="evaluate($index)" class="animate fadeIn" style="background:#FAFAFA">
+            <td colspan="3">
+              <form class="sky-form">
+                <div class="row">
+                  <section class="col one_full">
+                    <div class="container" ng-repeat="audio in selectedAudios">
+                      <div class="col one_full audio-col">
+                        <audio controls style="float:left;">
+                          <source src='{{"http://swfideas.com/ci22/uploads/"+audio.Nombre}}' type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                        <span class="audio-detalle">
+                          <strong>Descripción:</strong>
+                            {{audio.Descripcion}}
+                          </span>
+
+                      </div>
+                    </div>
+                  </section>
+                  <section class="col one_full last">
+                    <label class="label">Subir archivo(s) <strong>MP3</strong></label>
+                    <div class="row">
+                      <section class="col">
+                        <div class="button btn_action1"
+                          ng-multiple="true"
+                          ng-model="files"
+                          ng-file-select ng-accept="'audio/mp3'"
+                          ><i class="fa fa-plus fa-lg"></i>&nbsp;Selecciona...</div>
+                        <div class="button" ng-click="upload(files)" ng-if="files.length > 0">Subir...</div>
+                      </section>
+                    </div>
+                    <div class="body dp_uploader_filedesc dp_uploader_filedesc_bar" ng-repeat="file in files">
+                      <!-- titulo audio -->
+                      <section class="ng-scope">
+                        <label class="label">Descripción</label>
+                        <label class="input"> <i class="icon-append icon-tag"></i>
+                          <input type="text" ng-model="file.descripcion" placeholder="Descripción">
+                        </label>
+                      </section>
+                      <!--/titulo audio -->
+                      <i class="fa fa-music" style="color: #E54C4C;"></i>&nbsp;&nbsp;
+                      <span class="dp_uploader_filedesc_alt">nombre: </span>{{ file.name }}&nbsp;
+                      <span class="dp_uploader_filedesc_alt">tipo: </span>{{ file.type }}&nbsp;
+                      <span class="dp_uploader_filedesc_alt">tamaño: </span>{{ file.size/1048576 | number:2 }} MB&nbsp;
+                      <span class="dp_uploader_filedesc_alt">descripcion: </span>{{ file.descripcion }}&nbsp;
+                      <span ng-show="file.progress > 0"><span class="dp_uploader_filedesc_alt">upload: </span>{{ file.progress}} %&nbsp;<i class="fa fa-check pull-right" style="color: #8CC544; font-size: 1.5em;" ng-show="file.progress == 100"></i></span>
+                      <div class="ui-progress-bar ui-container animate fadeIn" ng-show="file.progress > 0 && file.progress < 100"><div class="ui-progress" style="width: {{file.progress}}%;"></div></div>
+                    </div>
+                  </section>
+                  <!-- <section class="col one_full last">
+                    selectedAudios: {{selectedAudios | json}}
+                  </section> -->
+                  <!-- consola -->
+                  <!--
+                  <section class="col one_half" ng-if="selected_categoria.PK_Contenido">
+                    <pre>progressArray: {{progressArray | json}}</pre>
+                    <pre>uploadedSycArray: {{uploadedSycArray | json}}</pre>
+                  </section>
+                  <section class="col one_half" ng-if="selected_categoria.PK_Contenido">
+                    <pre>uploadedArray: {{uploadedArray | json}}</pre>
+                    <p>selected_categoria: {{selected_categoria | json}}</p>
+                  </section>
+                  -->
+                  <!-- /consola -->
+                </div>
+                <footer>
+                  <!-- <input type="submit" class="button pull-right" value="Guardar"/> -->
+                </footer>
+              </form>
+              <!-- <pre>categorias {{categorias  | json}}</pre> -->
+            </td>
+          </tr>
+          <!--/audios -->
         </tbody>
       </table>
     </div>

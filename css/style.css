@@ -4582,6 +4582,16 @@ li.dp_notas_item {
 	padding: .2em 1em;
 	border: solid thin rgb(247, 247, 247);
 }
+
+.dp_actions {
+	width:10em;
+}
+
+.dp_actions > a > i {
+	float:left;
+	padding: .3em 0;
+}
+
 .dp_actions a.smlinks:hover {
 	color: #333;
 	border: 1px solid #999;
@@ -4684,4 +4694,14 @@ div.tab-pane.ng-scope.active{
 
 .button disabled{
 	backgroung:red!important;
+}
+
+.audio-detalle{
+	float:left;
+	padding: .43em!important;
+}
+
+.audio-col{
+	border-bottom: solid thin rgb(221, 221, 221);
+	margin-top: .5em!important;
 }
