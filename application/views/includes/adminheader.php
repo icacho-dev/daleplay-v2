@@ -33,6 +33,7 @@
 
     <link rel="stylesheet" href="<?php echo base_url();?>css/reset.css" type="text/css" />
     <link rel="stylesheet" href="<?php echo base_url();?>css/style.css" type="text/css" />
+    <link rel="stylesheet" href="<?php echo base_url();?>css/dialogs.css" type="text/css" />
 
     <!-- font awesome icons -->
     <link rel="stylesheet" href="<?php echo base_url();?>css/font-awesome/css/font-awesome.min.css">
@@ -81,9 +82,11 @@
     <!-- progressbar -->
     <link rel="stylesheet" href="<?php echo base_url();?>js/progressbar/ui.progress-bar.css">
 
-    <!-- mega menu -->
-    <link href="<?php echo base_url();?>js/mainmenu/bootstrap.min.css" rel="stylesheet">
+    <!-- mega menu-->
+    <!-- <link href="<?php echo base_url();?>js/mainmenu/bootstrap.min.css" rel="stylesheet">-->
     <link href="<?php echo base_url();?>js/mainmenu/menu.css" rel="stylesheet">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+
 
     <!-- forms -->
     <link rel="stylesheet" href="<?php echo base_url();?>js/form/sky-forms2.css" type="text/css" media="all">
@@ -92,20 +95,23 @@
     <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>js/tabs/assets/css/responsive-tabs2.css">
     <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>js/tabs/assets/css/responsive-tabs3.css">
 
-    <!-- angular-modal -->
-    <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>js/angular-fancy-modal/angular-fancy-modal.min.css">
+    <!-- angular-modal
+    <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>js/angular-fancy-modal/angular-fancy-modal.min.css"> -->
 
     <!-- angular app https://code.angularjs.org/1.2.28/ -->
-    <script src="http://code.angularjs.org/1.2.13/angular.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.8/angular-ui-router.min.js"></script>
+    <script src="//code.angularjs.org/1.2.13/angular.js"></script>
+    <script src="//code.angularjs.org/1.2.25/angular-sanitize.min.js"></script>
   	<script src="<?php echo base_url();?>js/app/ui-bootstrap-tpls-0.12.0.min.js"></script>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.8/angular-ui-router.min.js"></script>
   	<script src="<?php echo base_url();?>js/app/angular-timestamp-filter.js"></script>
   	<script src="<?php echo base_url();?>js/angular-fancy-modal/angular-fancy-modal.min.js"></script>
   	<script src="<?php echo base_url();?>js/angular-file-upload/angular-file-upload-shim.min.js"></script>
   	<script src="<?php echo base_url();?>js/angular-file-upload/angular-file-upload.min.js"></script>
+
+    <script src="<?php echo base_url();?>js/app/dialogs.min.js"></script>
   	<script src="<?php echo base_url();?>js/app/app.js"></script>
   	<script src="<?php echo base_url();?>js/app/controllers.js"></script>
-
 </head>
 
 <body ng-app="App">

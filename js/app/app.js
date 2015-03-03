@@ -1,5 +1,6 @@
 angular.module('App',[
 	'ui.bootstrap',
+	'dialogs.main',
 	'ui.router',
 	'srph.timestamp-filter',
 	'vesparny.fancyModal',
@@ -43,7 +44,7 @@ angular.module('App',[
   function($scope,$location) {
 
 		console.info('ini DashboardController ');
-		
+
 		$scope.titulo = 'Dashboard';
 		var path = $location.path();
 		switch(path)
@@ -53,11 +54,13 @@ angular.module('App',[
 			case '/Contenidos': $scope.titulo = 'Contenidos';break;
 			case '/Usuarios': $scope.titulo = 'Usuarios';break;
 		}
+		$location.hash('');
 
     $scope.go = function(newtitulo,path) {
     	$scope.titulo = newtitulo;
     	console.info(path);
 			$location.path( path );
+			$location.hash('');
   	}
 })
 ;
