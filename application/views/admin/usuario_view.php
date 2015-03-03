@@ -2,8 +2,10 @@
 <div class="content_fullwidth less2" ng-controller="UsuariosController">
 
     <div class="container">
-        <div class="one_full" >
-          <button type="button" ng-show="!evaluateCreate()" class="btn btn-primary pull-right" ng-click="new()">Nuevo</button>
+        <div class="one_full">
+          <div class="content_fullwidth less">
+            <button type="button" ng-show="!evaluateCreate()" class="btn btn-primary pull-right" ng-click="new()">Nuevo</button>
+          </div>
           <div class="dp_form1" ng-show="evaluateCreate()" id="UserNew">
 
                 <form accept-charset="utf-8"
@@ -111,33 +113,37 @@
         </div>
 
         <div class="one_full">
+  		        <div class="content_fullwidth less2" ng-repeat="usuario in usuarios" id="User{{ usuario.PK_Usuario }}">
+  		            <div class="container">
+                      <div class="one_fifth">
+                        <h5>Usuario</h5>
+                        <p>
+                          {{ usuario.UserName }}<span class="dp_tinydetail">ID: {{ usuario.PK_Usuario }}</span>
+                        </p>
+                      </div>
+  		                <div class="one_fifth">
+                        <h5>Email</h5>
+                        <p>
+                          {{ usuario.Email }}
+                        </p>
+                      </div>
+                      <div class="one_fifth">
+                        <h5>Tipo</h5>
+                        <p class="dp_infolabel">{{ EsAdmin(usuario.EsAdmin) }}</p>
+                      </div>
+                      <div class="one_fifth">
+                        <h5>Activo</h5>
+                        <p class="dp_infolabel">{{ UsuarioActivo(usuario.UsuarioActivo) }}</p>
+                      </div>
+  		                <div class="alicent dp_actions one_fifth last">
+    		                	<a href="javascript:void(0)" class="smlinks" ng-click="edit(usuario, $index)"><i class="fa fa-edit"></i> Editar</a>
+    		                	<a href="javascript:void(0)" class="smlinks" ng-click="delete(usuario)"><i class="fa fa-trash-o"></i> Borrar</a>
+                          <a href="javascript:void(0)" class="smlinks" ng-click="detalle(usuario, $index)"><i class="fa fa-check-square-o"></i> Privilegios</a>
+  		                </div>
+  		            </div>
 
-            <table border="0" cellpadding="4" cellspacing="0" class="table " >
-  		        <thead>
-
-  		            <tr>
-  		                <th>Usuario</th>
-  		                <th>Email</th>
-  		                <th>Tipo</th>
-  		                <th>Activo</th>
-  		                <th></th>
-  		            </tr>
-  		        </thead>
-  		        <tbody ng-repeat="usuario in usuarios" id="User{{ usuario.PK_Usuario }}">
-  		            <tr>
-                      <td style="width:100px;">{{ usuario.UserName }}<span class="dp_tinydetail">ID: {{ usuario.PK_Usuario }}</span></td>
-  		                <td>{{ usuario.Email }}</td>
-                      <td><p class="dp_infolabel">{{ EsAdmin(usuario.EsAdmin) }}</p></td>
-                      <td><p class="dp_infolabel">{{ UsuarioActivo(usuario.UsuarioActivo) }}</p></td>
-  		                <td class="alicent dp_actions">
-  		                	<a href="javascript:void(0)" class="smlinks" ng-click="edit(usuario, $index)"><i class="fa fa-edit"></i> Editar</a>
-  		                	<a href="javascript:void(0)" class="smlinks" ng-click="delete(usuario)"><i class="fa fa-trash-o"></i> Borrar</a>
-                        <a href="javascript:void(0)" class="smlinks" ng-click="detalle(usuario, $index)"><i class="fa fa-check-square-o"></i> Privilegios</a>
-  		                </td>
-  		            </tr>
-
-                  <tr ng-show="evaluateAdmin($index)" class="animate fadeIn" style="background:#FAFAFA">
-                    <td colspan="5">
+                  <div ng-show="evaluateAdmin($index)" class="animate fadeIn" style="background:#FAFAFA">
+                    <div colspan="5">
                       <form ng-submit="savecats()" class="sky-form">
                         <label class="checkbox" style="font-weight:bold;">
                           <i class=""></i>
@@ -164,11 +170,11 @@
                         </footer>
                       </form>
                       <!-- <pre>categorias {{categorias  | json}}</pre> -->
-                    </td>
-                  </tr>
+                    </div>
+                  </div>
 
-                  <tr ng-show="evaluateEdit($index)" class="animate fadeIn" style="background:#FAFAFA">
-                    <td colspan="5">
+                  <div ng-show="evaluateEdit($index)" class="animate fadeIn" style="background:#FAFAFA">
+                    <div colspan="5">
                       <div class="one_full" >
 
                           <div class="dp_form1">
@@ -276,14 +282,12 @@
                               </footer>
                               </form>
                           </div>
-
                       </div>
-                    </td>
-                  </tr>
-  		        </tbody>
-		        </table>
-        </div>
-    </div>
+                    </div>
+  		            </div>
+		           </div>
+          </div>
+      </div>
 
 </div><!-- ./content area -->
 <div class="clearfix"></div>
