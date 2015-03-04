@@ -40,63 +40,54 @@ class Usuario_controller extends CI_Controller {
 
 	//INSERT
 	public function save_usuario(){
-
 		$data = json_decode(file_get_contents('php://input'), true);
 
 		$arr = array(
-			'result' => array(
-				'UserName' => $data['UserName'] ,
-				'Email' => $data['Email'] ,
-				'Telefono' => isset($data['Telefono']) ? $data['Telefono'] : '',
-				'EsAdmin' =>  isset($data['EsAdmin']) ? $data['EsAdmin'] : 'false',
-				'Password' => $data['Password'] ,
-				'UsuarioActivo' => isset($data['UsuarioActivo']) ? $data['UsuarioActivo'] : 'false',
-			),
-			'errors' => array(),
-			'op' => true
+				'result' => array(
+					'UserName' => $data['UserName'] ,
+					'Email' => $data['Email'] ,
+					'Telefono' => isset($data['Telefono']) ? $data['Telefono'] : '',
+					'EsAdmin' =>  isset($data['EsAdmin']) ? $data['EsAdmin'] : 'false',
+					'Password' => $data['Password'] ,
+					'UsuarioActivo' => isset($data['UsuarioActivo']) ? $data['UsuarioActivo'] : 'false',
+				),
+				'errors' => '',
+				'op' => true
 		);
 
 		$arr['result']['PK_Usuario'] =
-			(!isset($data['PK_Usuario']))
-				? $this->Usuario_model->insert_usuario($arr['result'])
-				: $this->Usuario_model->edit_usuario($arr['result'] , $data['PK_Usuario'])
-				;
+				(!isset($data['PK_Usuario']))
+					? $this->Usuario_model->insert_usuario($arr['result'])
+					: $this->Usuario_model->edit_usuario($arr['result'] , $data['PK_Usuario'])
+					;
 
 		echo json_encode($arr);
-
 	}
 
 	//INSERT
 	public function save_categoria_usuario(){
 		$data = json_decode(file_get_contents('php://input'), true);
 		$list_categorias = $data['categorias_list'];
-		try{
 
-			$Arr = array();
-			foreach ($list_categorias as $categoria) {
-				if(isset($categoria['Exist']) && $categoria['Exist'] == "true") {
-					array_push($Arr, array(
-				    	'FK_Categoria' => $categoria['FK_Categoria'] ,
-				    	'FK_Usuario' => $categoria['PK_Usuario']
-					));
-				}
-			};
-
-			$this->Usuario_model->delete_categoria_usuario($data['PK_Usuario']);
-			if(count($Arr)>0 ) {
-				$this->Usuario_model->insert_categoria_usuario($Arr);
+		$Arr = array();
+		foreach ($list_categorias as $categoria) {
+			if(isset($categoria['Exist']) && $categoria['Exist'] == "true") {
+				array_push($Arr, array(
+			    	'FK_Categoria' => $categoria['FK_Categoria'] ,
+			    	'FK_Usuario' => $categoria['PK_Usuario']
+				));
 			}
+		};
 
-		} catch (Exception $e) {
-			array_push( $arr['errors'] , $e->getMessage() );
-			throw $e;
+		$this->Usuario_model->delete_categoria_usuario($data['PK_Usuario']);
+		if(count($Arr)>0 ) {
+			$this->Usuario_model->insert_categoria_usuario($Arr);
 		}
 
 		echo 'inserted';
 	}
 	//DELETE
 	public function delete_usuario(){
-
 		$data = json_decode(file_get_contents('php://input'), true);
 
 		$arr = array(

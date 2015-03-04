@@ -1,6 +1,6 @@
 angular.module('Controllers', [])
 
-.controller('Categoriasv2Controller', function($scope, $http, $location) {
+.controller('Categoriasv2Controller', function($scope, $http, $location, dialogs) {
 
   console.info('ini->Categoriasv2Controller');
 
@@ -16,7 +16,6 @@ angular.module('Controllers', [])
     $scope.list_categoria = response.data.list_categoria;
     $scope.list_idioma = response.data.list_idioma;
   });
-
   //REFRESH
   $scope.refresh = function() {
 
@@ -35,7 +34,7 @@ angular.module('Controllers', [])
   //SELECT ID
   $scope.edit = function(categoria) {
       $scope.categoria = categoria;
-    }
+  }
     //SAVE||UPDATE
   $scope.save = function() {
 
@@ -53,7 +52,10 @@ angular.module('Controllers', [])
           }
           if (insert) {
             $scope.list_categoria.push(result);
+            dialogs.notify('Información','Categoría Creada: '+result.Clave,{'windowClass':'center-modal'});
           }
+          else dialogs.notify('Información','Categoría Actualizada: '+result.Clave,{'windowClass':'center-modal'});
+
           $scope.categoria = angular.copy($scope.new_categoria);
           $scope.skyform.$setPristine();
           console.info("save->" + response.data.op);
@@ -61,11 +63,17 @@ angular.module('Controllers', [])
           // ver que pedo con los response.data.errors
         }
 
+      }, function (error)
+      {
+        console.info('Error ');
+        dialogs.error('Error',error.data,{'windowClass':'center-modal'})
       });
     }
     //DELETE
   $scope.delete = function(categoria) {
-
+    console.info(categoria.Clave);
+    var dlg = dialogs.confirm('Por favor Confirme','¿Desea Eliminar la Categoría: '+categoria.Clave+'?',{'windowClass':'center-modal'});
+    dlg.result.then(function(btn){
       $http.post('categorias_controller/delete_categoria', categoria).then(function(response) {
 
         console.log(response);
@@ -77,14 +85,24 @@ angular.module('Controllers', [])
               $scope.list_categoria.splice(i, 1);
             }
           }
+          dialogs.notify('Información','Categoría Eliminada: '+categoria.Clave,{'windowClass':'center-modal'});
         } else {
           console.error(response.data);
           // ver que pedo con los response.data.errors
         }
 
+      }, function (error)
+      {
+        console.info('Error ');
+        dialogs.error('Error',error.data,{'windowClass':'center-modal'})
       });
-    }
-    // LOAD DATA
+	  }, function (btn)
+    {
+
+    });
+  }
+
+  // LOAD DATA
   $scope.refresh();
 
 })
@@ -120,7 +138,7 @@ angular.module('Controllers', [])
 
 })
 .controller('ContenidosController', function(
-  $scope, $http, $location, $fancyModal, $log, ContenidosService, $upload) {
+  $scope, $http, $location, $fancyModal, $log, ContenidosService, $upload, dialogs) {
 
   $scope.list_categoria = {};
   $scope.selected_categoria = {};
@@ -167,7 +185,9 @@ angular.module('Controllers', [])
             for (var t in result) {
               $scope.contenidos_traducciones.push(result[t]);
             }
+            dialogs.notify('Información','Contenido Creado: '+$scope.selected_categoria.list_idioma[0].titulo,{'windowClass':'center-modal'});
           }
+          else dialogs.notify('Información','Contenido Actualizado: '+$scope.selected_categoria.list_idioma[0].titulo,{'windowClass':'center-modal'});
           //$scope.categoria = angular.copy($scope.new_categoria);
           $scope.selected_categoria = {}; //?que pedo si o no?
           $scope.skyform.$setPristine();
@@ -175,11 +195,17 @@ angular.module('Controllers', [])
         } else {
           // ver que pedo con los response.data.errors
         }
+      }, function (error)
+      {
+        console.info('Error ');
+        dialogs.error('Error',error.data,{'windowClass':'center-modal'})
       });
 
     }
     //DELETE
   $scope.delete = function(c) {
+    var dlg = dialogs.confirm('Por favor Confirme','¿Desea Eliminar el Contenido: '+c.Titulo+'?',{'windowClass':'center-modal'});
+    dlg.result.then(function(btn){
       ContenidosService.delete(c.PK_Contenido).then(function(response) {
         if (response.data.op) {
           var result = response.data.result;
@@ -188,11 +214,20 @@ angular.module('Controllers', [])
               $scope.contenidos_traducciones.splice(i, 1);
             }
           }
+          dialogs.notify('Información','Contenido Eliminado: '+c.Titulo,{'windowClass':'center-modal'});
         } else {
           // ver que pedo con los response.data.errors
         }
+      }, function (error)
+      {
+        console.info('Error ');
+        dialogs.error('Error',error.data,{'windowClass':'center-modal'})
       });
-    }
+    }, function (btn)
+    {
+
+    });
+  }
     //REFRESH
   $scope.refresh = function() {
 
@@ -351,7 +386,7 @@ angular.module('Controllers', [])
 
   return alertService;
 })
-.service('IdiomasService', function ($location,$http,$q) {
+.service('IdiomasService', function ($location,$http,$q, dialogs) {
 	//SELECT ----------------------------------------------------------------- IDIOMAS
     var idiomas = {};
 
@@ -389,7 +424,7 @@ angular.module('Controllers', [])
     	return $http.post('idiomas_controller/idiomas_controller/delete_idioma',id);
     }
 })
-.controller('IdiomasController',function($scope,$http,$location,IdiomasService){
+.controller('IdiomasController',function($scope,$http,$location,IdiomasService, dialogs){
 
 	console.info('ini->IdiomasController');
 
@@ -427,30 +462,52 @@ angular.module('Controllers', [])
 						insert = false;
 					}
 				}
-				if(insert) $scope.idiomas.push(result)
+				if(insert)
+        {
+          $scope.idiomas.push(result);
+          dialogs.notify('Información','Idioma Creado: '+result.Nombre,{'windowClass':'center-modal'});
+        }
+        else dialogs.notify('Información','Idioma Actualizado: '+result.Nombre,{'windowClass':'center-modal'});
 				$scope.idioma = {};
 				$scope.skyform.$setPristine();
 			} else {
 				// ver que pedo con los response.data.errors
 			}
-		});
+		}
+    , function (error)
+    {
+      console.info('Error ');
+      dialogs.error('Error',error.data,{'windowClass':'center-modal'})
+    });
 	}
 	//DELETE
 	$scope.delete = function (idioma) {
-        IdiomasService.delete(idioma.PK_Idioma).then(function(response){
-	        if(response.data.op)
-			{
-				var result = response.data.result;
-				for (i in $scope.idiomas) {
-					if ($scope.idiomas[i].PK_Idioma == result.PK_Idioma) {
-	                	$scope.idiomas.splice(i, 1);
-	            	}
-				}
-			} else {
-				// ver que pedo con los response.data.errors
-			}
-        });
-    }
+    var dlg = dialogs.confirm('Por favor Confirme','¿Desea Eliminar el Idioma: '+idioma.Nombre+'?',{'windowClass':'center-modal'});
+    dlg.result.then(function(btn){
+      IdiomasService.delete(idioma.PK_Idioma).then(function(response){
+        if(response.data.op)
+        {
+          var result = response.data.result;
+          for (i in $scope.idiomas) {
+            if ($scope.idiomas[i].PK_Idioma == result.PK_Idioma) {
+                      $scope.idiomas.splice(i, 1);
+                  }
+          }
+          dialogs.notify('Información','Idioma Eliminado: '+usuario.Nombre,{'windowClass':'center-modal'});
+        } else {
+          // ver que pedo con los response.data.errors
+        }
+      }
+      , function (error)
+      {
+        console.info('Error ');
+        dialogs.error('Error',error.data,{'windowClass':'center-modal'})
+      });
+	  }, function (btn)
+    {
+
+    });
+  }
     // LOAD DATA
     $scope.refresh();
 
@@ -483,7 +540,7 @@ angular.module('Controllers', [])
     return $http.post('usuario_controller/save_categoria_usuario', categorias);
   };
 })
-.controller('UsuariosController', function($scope, $http, $location, UsuariosService) {
+.controller('UsuariosController', function($scope, $http, $anchorScroll, $location, dialogs, UsuariosService) {
 
   console.info('ini->UsuariosController');
 
@@ -491,7 +548,7 @@ angular.module('Controllers', [])
   $scope.usuarios = {};
   $scope.categorias = {};
 
-  //REFRESH
+  //REFRESH LOADS DG
   $scope.refresh = function() {
 
     $scope.clean();
@@ -499,7 +556,7 @@ angular.module('Controllers', [])
       $scope.usuarios = d.data;
     });
   };
-
+  //CLEAN PAGE
   $scope.clean = function(){
 
     $scope.usuario = {};
@@ -511,6 +568,12 @@ angular.module('Controllers', [])
     $scope.usuario.Email = "";
     $scope.usuario.Telefono = "";
 
+    $scope.rowvisible = -1;
+
+    $scope.iscreate = false;
+    $scope.isedit = false;
+    $scope.isadmin = false;
+
     if ($scope.skyform != undefined)
     {
       $scope.skyform.$setPristine(true);
@@ -518,24 +581,28 @@ angular.module('Controllers', [])
       $scope.skyform.confirmapassword.$valid=true;
     }
   }
-
-	//SELECT ID
-	$scope.edit = function (usuario) {
-		$scope.usuario = usuario;
-  }
-
+  $scope.gotoAnchor = function(x) {
+    var newHash = 'User' + x;
+    $location.hash('');
+    if ($location.hash() !== newHash) {
+      $location.hash('User' + x);
+      $anchorScroll();
+    } else {
+      $anchorScroll();
+    }
+  };
+  //DISPLAY A VALUE ADMIN/USER IN DG
 	$scope.EsAdmin = function (b) {
     return b == 'true' ? 'ADMIN' :'USER'
   }
-
+  //DISPLAY A VALUE ACTIVO/INACTIVO IN DG
 	$scope.UsuarioActivo = function (b) {
     return b == 'true' ? 'ACTIVO' :'INACTIVO'
   }
-
-  //INSERT
+  //INSERT USER
   $scope.save = function () {
     UsuariosService.save($scope.usuario).then(function(response){
-      console.info(response.data);
+      console.info('Saved '+response.data);
       if(response.data.op)
       {
         var result = response.data.result;
@@ -546,70 +613,144 @@ angular.module('Controllers', [])
             insert = false;
           }
         }
-        if(insert) $scope.usuarios.push(result)
+        if(insert){
+          $scope.usuarios.push(result);
+          dialogs.notify('Información','Usuario Creado: '+result.UserName,{'windowClass':'center-modal'});
+        }
+        else dialogs.notify('Información','Usuario Actualizado: '+result.UserName,{'windowClass':'center-modal'});
+
         $scope.clean();
+
       } else {
         // ver que pedo con los response.data.errors
       }
-    });
-  }
-	//DELETE
-	$scope.delete = function (usuario) {
-    UsuariosService.delete(usuario.PK_Usuario).then(function(response)
+    }, function (error)
     {
-  	  if(response.data.op)
-  		{
-  				var result = response.data.result;
-  				for (i in $scope.usuarios) {
-  					if ($scope.usuarios[i].PK_Usuario == result.PK_Usuario) {
-  	                	$scope.usuarios.splice(i, 1);
-  	            	}
-  				}
-  		} else {
-  				// ver que pedo con los response.data.errors
-  		}
+      console.info('Error ');
+      dialogs.error('Error',error.data,{'windowClass':'center-modal'})
     });
   }
-  $scope.detalle = function(usuario, index) {
-    console.info('Detalle Usuario '+index + ' PK_Usuario:' + usuario.PK_Usuario);
-    $scope.rowvisible = $scope.rowvisible == index ? -1 : index;
-    $scope.selall = {'Selected' : true};
-    UsuariosService.categorias(usuario.PK_Usuario).then(function(d) {
-      $scope.categorias = d.data;
-      $scope.selectedall();
-    });
+	//DELETE USER
+	$scope.delete = function (usuario) {
+    var dlg = dialogs.confirm('Por favor Confirme','¿Desea Eliminar al Usuario: '+usuario.UserName+'?',{'windowClass':'center-modal'});
+    dlg.result.then(function(btn){
+      UsuariosService.delete(usuario.PK_Usuario).then(function(response)
+      {
+        if(response.data.op)
+        {
+            var result = response.data.result;
+            for (i in $scope.usuarios) {
+              if ($scope.usuarios[i].PK_Usuario == result.PK_Usuario) {
+                        $scope.usuarios.splice(i, 1);
+                    }
+            }
+            dialogs.notify('Información','Usuario Eliminado: '+usuario.UserName,{'windowClass':'center-modal'});
+        } else {
+          dialogs.error('Error',response.data.errors,{'windowClass':'center-modal'});
+        }
+      }, function (error)
+      {
+        console.info('Error ');
+        dialogs.error('Error',error.data,{'windowClass':'center-modal'})
+      });
+    }, function (btn)
+    {
 
-    $scope.usuariosel = usuario.PK_Usuario;
+    });
+  }
+  $scope.new = function() {
+    $scope.clean();
+    $scope.iscreate = true;
+    $scope.gotoAnchor('New');
+  }
+  //SELECT A ROW IN THE DG
+  $scope.detalle = function(usuario, index) {
+    $scope.rowvisible = $scope.rowvisible == index && $scope.isadmin ? -1 : index;
+    if($scope.rowvisible >= 0)
+    {
+      $scope.usuario = usuario;
+      $scope.iscreate = false;
+      $scope.isedit = false;
+      $scope.isadmin = true;
+      $scope.gotoAnchor(usuario.PK_Usuario);
+
+      $scope.selall = {'Selected' : true};
+      UsuariosService.categorias(usuario.PK_Usuario).then(function(d) {
+        $scope.categorias = d.data;
+        $scope.selectedall();
+      });
+    }
+    else
+    {
+      $scope.usuario = {};
+      $scope.iscreate = false;
+      $scope.isedit = false;
+      $scope.isadmin = false;
+    }
   };
-  $scope.evaluate = function(index) {
-    return index == $scope.rowvisible;
+	//SELECT ID
+	$scope.edit = function(usuario, index) {
+    $scope.rowvisible = $scope.rowvisible == index && $scope.isedit ? -1 : index;
+    if($scope.rowvisible >= 0)
+    {
+      $scope.usuario = usuario;
+      $scope.iscreate = false;
+      $scope.isedit = true;
+      $scope.isadmin = false;
+      $scope.gotoAnchor(usuario.PK_Usuario);
+    }
+    else
+    {
+      $scope.usuario = {};
+      $scope.iscreate = false;
+      $scope.isedit = false;
+      $scope.isadmin = false;
+    }
+  }
+  //EVALUATE WHEN A CREATE IS VISIBLE
+  $scope.evaluateCreate = function() {
+    return $scope.iscreate;
   };
+  //EVALUATE WHEN A ROW IS VISIBLE
+  $scope.evaluateEdit = function(index) {
+    return index == $scope.rowvisible && $scope.isedit;
+  };
+  //EVALUATE WHEN A ROW IS VISIBLE
+  $scope.evaluateAdmin = function(index) {
+    return index == $scope.rowvisible && $scope.isadmin;
+  };
+  //CHANGE ALL DETAIL CHECK BOXES - SINCE SELECT ALL CHECK
   $scope.changeall = function(){
     angular.forEach($scope.categorias, function(cat) {
       cat.Exist = $scope.selall.Selected ? "true" : "false";
     });
   };
+  //CHECK AFTER LOAD CATS TO SET SELECT ALL CHECK
   $scope.selectedall = function(){
     angular.forEach($scope.categorias, function(cat) {
       if(cat.Exist == "false") $scope.selall.Selected = false;
     });
   };
+  //TRIGGER BY CHECK DETAIL TO UNCHECK SELECT ALL CHECK
   $scope.unselectall = function(cat){
     if(!(cat.Exist=="true") && $scope.selall.Selected)
       $scope.selall.Selected = false;
   };
+  //SAVE ALL CATS BY USER
   $scope.savecats = function(){
-    console.info('savecats');
-    $scope.arrcategorias = {'categorias_list':$scope.categorias,'PK_Usuario':$scope.usuariosel};
-
+    $scope.arrcategorias = {'categorias_list':$scope.categorias,'PK_Usuario':$scope.usuario.PK_Usuario};
     UsuariosService.savecats($scope.arrcategorias).then(function(d) {
       $scope.rowvisible = -1;
+      dialogs.notify('Información','Privilegios Actualizados: '+$scope.usuario.UserName,{'windowClass':'center-modal'});
+    }, function (error)
+    {
+      console.info('Error ');
+      dialogs.error('Error',error.data,{'windowClass':'center-modal'})
     });
   };
 
   // LOAD DATA
   $scope.refresh();
-
 })
 .directive("passwordVerify", function() {
    return {
