@@ -106,11 +106,11 @@ angular.module('Controllers', [])
   $scope.refresh();
 
 })
-.service('ContenidosService', function($location, $http, $q) {
+.service('ContenidosService', function($location, $http, $q){
 
   this.delete = function(id) {
     return $http.post('contenidos_controller/delete_contenido', id);
-  }
+  };
 
   this.get_model = function() {
 
@@ -128,6 +128,12 @@ angular.module('Controllers', [])
     console.info(contenido);
     //return true;
     return $http.post('contenidos_controller/save_contenido', contenido);
+  };
+
+  this.audiosById  = function(categoria) {
+    console.info('ContenidosService:call->audiosById');
+    console.info(categoria);
+    return $http.post('contenidos_controller/get_archivosById', categoria);
   };
 
 })
@@ -156,7 +162,7 @@ angular.module('Controllers', [])
       };
 
       //$scope.selected_categoria = categoria;
-    }
+    };
     //SAVE
   $scope.save = function() {
 
@@ -168,15 +174,15 @@ angular.module('Controllers', [])
           var result = response.data.Traduccion;
           var insert = true;
 
-          for (i in $scope.contenidos_traducciones) {
-            if ($scope.contenidos_traducciones[i].PK_Contenido == result[0].PK_Contenido &&
-              $scope.contenidos_traducciones[i].PK_Idioma == result[0].PK_Idioma) {
+          for (var i in $scope.contenidos_traducciones) {
+            if ($scope.contenidos_traducciones[i].PK_Contenido === result[0].PK_Contenido &&
+              $scope.contenidos_traducciones[i].PK_Idioma === result[0].PK_Idioma) {
               $scope.contenidos_traducciones[i] = result[0];
               insert = false;
             }
           }
-          if (insert) {
-            for (t in result) {
+          if(insert){
+            for (var t in result) {
               $scope.contenidos_traducciones.push(result[t]);
             }
             dialogs.notify('Información','Contenido Creado: '+$scope.selected_categoria.list_idioma[0].titulo,{'windowClass':'center-modal'});
@@ -203,7 +209,7 @@ angular.module('Controllers', [])
       ContenidosService.delete(c.PK_Contenido).then(function(response) {
         if (response.data.op) {
           var result = response.data.result;
-          for (i in $scope.contenidos_traducciones) {
+          for (var i in $scope.contenidos_traducciones) {
             if ($scope.contenidos_traducciones[i].PK_Contenido == result.PK_Contenido) {
               $scope.contenidos_traducciones.splice(i, 1);
             }
@@ -259,11 +265,13 @@ angular.module('Controllers', [])
   };
   // ------------------- UPLOAD FILE
   $scope.files = [];
+  $scope.selected_categoria_files = [];
   $scope.progress = 0;
   $scope.progressArray = [];
   $scope.uploadedArray = [];
   $scope.uploadedSycArray = [];
-
+  $scope.rowvisible = -1;
+  $scope.selectedAudios = [];
 
   $scope.upload = function(files) {
 
@@ -277,8 +285,9 @@ angular.module('Controllers', [])
         $upload.upload({
           url: 'contenidos_controller/upload',
           fields: {
-            'FK_Contenido': $scope.selected_categoria.PK_Contenido,
-						'FK_Idioma': $scope.selected_categoria.list_idioma[0].FK_Idioma
+            'FK_Contenido': $scope.selected_categoria_files.PK_Contenido,
+						'FK_Idioma': $scope.selected_categoria_files.list_idioma[0].FK_Idioma,
+            'Descripcion': file.descripcion
           },
           file: file
         }).progress(function(evt) {
@@ -289,12 +298,14 @@ angular.module('Controllers', [])
           $scope.progressArray[$scope.progressArray.indexOf(evt.config.file)].progress = progressPercentage;
         }).success(function(data, status, headers, config) {
 					//regreso respuesta sobre upload, aun no confirmamos si subio
-          console.log('i:' + i + ' / file ' + config.file.name);
-					console.log('i:' + i + ' / uploaded. Response: ' + data);
+					console.log('i:' + i );
+          console.log(config.file.name);
+          console.log('data->');
+          console.log(data);
 
           var r = {
-            FK_Contenido : $scope.selected_categoria.PK_Contenido,
-            FK_Idioma : $scope.selected_categoria.list_idioma[0].FK_Idioma,
+            FK_Contenido : $scope.selected_categoria_files.PK_Contenido,
+            FK_Idioma : $scope.selected_categoria_files.list_idioma[0].FK_Idioma,
             Nombre : config.file.name
           };
 
@@ -306,6 +317,37 @@ angular.module('Controllers', [])
       }
 
     }
+  };
+
+  //-------------- ROW CONTROLLER
+  $scope.detalle = function(c, index) {
+    $scope.selected_categoria_files = {
+      "PK_Contenido": c.PK_Contenido,
+      "PK_Categoria": c.PK_Categoria,
+      "Clave": c.ClaveCat,
+      "list_idioma": [{
+        "FK_Idioma": c.PK_Idioma,
+        "Label": c.Label,
+        "Nombre": c.Nombre,
+        "titulo": c.Titulo,
+        "traduccion": c.Traduccion
+      }]
+    };
+    $scope.rowvisible = $scope.rowvisible === index ? -1 : index;
+    //$scope.selall = {'Selected' : true};
+    if($scope.rowvisible !== -1){
+      ContenidosService.audiosById(c).then(function(d) {
+        console.log("ContenidosService.audiosById->");
+        console.log(d);
+        $scope.selectedAudios = d.data.result;
+        /*$scope.categorias = d.data;
+        $scope.selectedall();*/
+      });
+    }
+    //$scope.usuariosel = usuario.PK_Usuario;
+  };
+  $scope.evaluate = function(index) {
+    return index === $scope.rowvisible;
   };
 
 })

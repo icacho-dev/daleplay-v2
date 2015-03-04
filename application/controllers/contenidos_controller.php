@@ -80,6 +80,18 @@ class Contenidos_controller extends CI_Controller {
 		header ('Content-type: application/json; charset=utf-8');
 		echo json_encode($this->Contenidos_model->get_view_contenidos_traducciones_AsArray());
 	}
+
+	public function get_archivosById() {
+		$data = json_decode(file_get_contents('php://input'), true);
+
+		$arr = array(
+			'result' => $this->Contenidos_model->get_archivosById_AsArray(array('FK_Idioma' => $data['PK_Idioma'],'FK_Contenido'=>$data['PK_Contenido'])),
+			'data' => $data,
+			'errors' => array()
+		);
+		header ('Content-type: application/json; charset=utf-8');
+		echo json_encode($arr);
+	}
 	//INSERT
 	public function save_contenido(){
 
@@ -110,11 +122,9 @@ class Contenidos_controller extends CI_Controller {
 		    $arr['result']['PK_Contenido'] =
 		    	( $IsInsert )
 		    	? $this->Contenidos_model->insert_contenido($PK_Contenido)
-				: $data['PK_Contenido']
-				;
+					: $data['PK_Contenido'];
 
 			$arr['op_contenido'] = (isset($arr['result']['PK_Contenido']))?true:false;
-				//&&$arr['result']['PK_Contenido']>0)?true:false;
 
 		} catch (Exception $e) {
 			array_push( $arr['errors'] , $e->getMessage() );
@@ -125,7 +135,7 @@ class Contenidos_controller extends CI_Controller {
 
 		    if($arr['op_contenido'] && isset($data['PK_Categoria'])){
 
-		    	$Contenido_CategoriaArr = array();
+	    	$Contenido_CategoriaArr = array();
 				array_push($Contenido_CategoriaArr, array(
 			    	'FK_Contenido' => (string)$arr['result']['PK_Contenido'] ,
 			    	'FK_Categoria' => (string)$data['PK_Categoria']
@@ -133,19 +143,10 @@ class Contenidos_controller extends CI_Controller {
 
 				$arr['Contenido_Categoria'] = $Contenido_CategoriaArr;
 
-				/*array_push($result['result']['list_idioma'],
-					$Contenido_CategoriaArr
-				);*/
-
-		    	$arr['op_contenido_categoria'] =
-		    		( $IsInsert )
-		    		?$this->Contenidos_model->insert_contenido_categoria($Contenido_CategoriaArr)
-					:TRUE
-					/*$this->Contenidos_model->update_contenido_categoria(
-					, <-- mandar viejos id's
-					, $data['PK_Contenido'] <--nuevos ids
-					, $data['PK_Categoria'])*/
-					;
+	    	$arr['op_contenido_categoria'] =
+	    		( $IsInsert )
+	    		?$this->Contenidos_model->insert_contenido_categoria($Contenido_CategoriaArr)
+					:TRUE;
 
 		    } else {
 				//delete categoria 1er insert
@@ -223,6 +224,7 @@ class Contenidos_controller extends CI_Controller {
 	{
 		$FK_Contenido = $this->input->post('FK_Contenido');
 		$FK_Idioma = $this->input->post('FK_Idioma');
+		$Descripcion = $this->input->post('Descripcion');
 
 		$config['upload_path'] = './uploads/';
 		$config['allowed_types'] = 'mp3';
@@ -232,7 +234,8 @@ class Contenidos_controller extends CI_Controller {
 
 		$this->load->library('upload', $config);
 
-		if ( ! $this->upload->do_upload('file'))
+
+		if ( !$this->upload->do_upload('file') )
 		{
 			$arr = array(
 				'op' => false ,
@@ -243,14 +246,17 @@ class Contenidos_controller extends CI_Controller {
 		}
 		else
 		{
+			$file_array = $this->upload->data('file_name');
+
 			$arr = array(
-				'op' => true ,
 				'msg' => $this->upload->data() ,
 				'PK_Contenido' => $FK_Contenido ,
 				'FK_Idioma' => $FK_Idioma ,
+				'File_Name' => $file_array['file_name'],
+				'Descripcion' => $Descripcion
 			);
 
-			// se hace el update a la base de datos por el $PK_Contenido
+			$arr['op'] = $this->Contenidos_model->insert_file($arr);
 		}
 		header ('Content-type: application/json; charset=utf-8');
 		echo json_encode($arr);
