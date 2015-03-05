@@ -4604,6 +4604,15 @@ li.dp_notas_item {
 	margin-top: 5px;
 	display: block;
 }
+
+.dp_badge1{
+	float: right;
+  font-size: .8em;
+  background: rgb(239, 239, 239);
+  padding: .05em .5em;
+  border-radius: .7em;
+}
+
 .dp_infolabel {
 	border-left: solid 3px #E54C4C;
 	padding: .5em;
@@ -4704,4 +4713,18 @@ div.tab-pane.ng-scope.active{
 .audio-col{
 	border-bottom: solid thin rgb(221, 221, 221);
 	margin-top: .5em!important;
+}
+
+.audio-delete {
+	float: left;
+	font-size: 1.4em;
+	background: rgb(66, 66, 66);
+	padding: 0 .2em!important;
+	border-radius: .25em;
+	margin: 0px 0px 0px .3em!important;
+}
+
+.audio-delete:hover {
+	color: #FFFFFF;
+  background: #E54C4C;
 }

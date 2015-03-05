@@ -1,20 +1,24 @@
-/* Custom dialog/modal headers */
-
-.dialog-header-error { background-color: #d2322d; }
-.dialog-header-wait { background-color: #428bca; }
-.dialog-header-notify { background-color: #eeeeee; }
-.dialog-header-confirm { background-color: #333333; }
-
-.dialog-header-error span,
-.dialog-header-error h4,
-.dialog-header-wait span,
-.dialog-header-wait h4,
-.dialog-header-confirm span,
-.dialog-header-confirm h4 { color: #ffffff; }
-
-.center-modal {
-	position: absolute;
-	left: 50%;
-	top: 50%;
-	transform: translate(0%, 25%);
-}
+/* Custom dialog/modal headers */
+
+.dialog-header-error { background-color: #d2322d; }
+.dialog-header-wait { background-color: #428bca; }
+.dialog-header-notify { background-color: #eeeeee; }
+.dialog-header-confirm { background-color: #333333; }
+
+.dialog-header-error span,
+.dialog-header-error h4,
+.dialog-header-wait span,
+.dialog-header-wait h4,
+.dialog-header-confirm span,
+.dialog-header-confirm h4 { color: #ffffff; }
+
+.center-modal {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left:  0;
+	margin: auto;
+	width: 80%;
+	height: 50%;
+}

@@ -53,8 +53,10 @@
     <link rel="stylesheet" href="<?php echo base_url();?>js/progressbar/ui.progress-bar.css">
 
     <!-- mega menu-->
+    <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>js/bootstrap-custom/css/bootstrap.css">
+    <link href="<?php echo base_url();?>js/mainmenu/bootstrap.min.css" rel="stylesheet">
     <link href="<?php echo base_url();?>js/mainmenu/menu.css" rel="stylesheet">
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <!--<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">-->
 
     <!-- forms -->
     <link rel="stylesheet" href="<?php echo base_url();?>js/form/sky-forms2.css" type="text/css" media="all">
