@@ -112,6 +112,10 @@ angular.module('Controllers', [])
     return $http.post('contenidos_controller/delete_contenido', id);
   };
 
+  this.delete_archivo = function(archivo) {
+    return $http.post('contenidos_controller/delete_archivo', archivo);
+  };
+
   this.get_model = function() {
 
     console.info($location.path());
@@ -144,7 +148,15 @@ angular.module('Controllers', [])
   $scope.selected_categoria = {};
   $scope.contenidos_traducciones = {};
   $scope.new_contenido = {};
-
+  //-- upload vars
+  $scope.selected_categoria_files = [];
+  $scope.progress = 0;
+  $scope.progressArray = [];
+  $scope.uploadedArray = [];
+  $scope.uploadedSycArray = [];
+  $scope.rowvisible = -1;
+  $scope.selectedAudios = [];
+  //--/upload vars
   //SELECT ID
   $scope.edit = function(c) {
       //var cat_id = $scope.list_categoria.map(function (element) {return element.PK_Categoria;}).indexOf('78');
@@ -227,7 +239,33 @@ angular.module('Controllers', [])
     {
 
     });
-  }
+  };
+
+  $scope.delete_archivo = function(c) {
+    var dlg = dialogs.confirm('Por favor Confirme','¿Desea Eliminar el Archivo: '+c.Descripcion+'?',{'windowClass':'center-modal'});
+    dlg.result.then(function(btn){
+      ContenidosService.delete_archivo(c).then(function(response) {
+        if (response.data.op) {
+          var result = response.data.result;
+          for (var i in $scope.selectedAudios) {
+            if ($scope.selectedAudios[i].PK_Archivo == result.PK_Archivo) {
+              $scope.selectedAudios.splice(i, 1);
+            }
+          }
+          dialogs.notify('Información','Archivo Eliminado: '+c.Descripcion,{'windowClass':'center-modal'});
+        } else {
+          // ver que pedo con los response.data.errors
+        }
+      }, function (error)
+      {
+        console.info('Error ');
+        dialogs.error('Error',error.data,{'windowClass':'center-modal'})
+      });
+    }, function (btn)
+    {
+
+    });
+  };
     //REFRESH
   $scope.refresh = function() {
 
@@ -264,18 +302,26 @@ angular.module('Controllers', [])
     });
   };
   // ------------------- UPLOAD FILE
-  $scope.files = [];
-  $scope.selected_categoria_files = [];
-  $scope.progress = 0;
-  $scope.progressArray = [];
-  $scope.uploadedArray = [];
-  $scope.uploadedSycArray = [];
-  $scope.rowvisible = -1;
-  $scope.selectedAudios = [];
+
+
+  $scope.$on('clear' , function(e , file)
+  {
+    console.info('$scope.files' , $scope.files);
+    console.info('clear' , file);
+
+  });
+
+  $scope.$watch('files' , function() {
+
+    console.info('watch');
+
+  }, true);
 
   $scope.upload = function(files) {
 
-    if (files && files.length) {
+    console.info('$scope.files' , $scope.files);
+
+    if (files.length > 0) {
 
       for (var i = 0; i < files.length; i++) {
         var file = files[i];
@@ -294,33 +340,44 @@ angular.module('Controllers', [])
           var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
           console.log('i:' + $scope.progressArray.indexOf(evt.config.file) + ' / progress: ' + progressPercentage + '% ' + evt.config.file.name);
           $scope.progress = progressPercentage;
-          //$scope.progressArray[i].progress = progressPercentage;
           $scope.progressArray[$scope.progressArray.indexOf(evt.config.file)].progress = progressPercentage;
         }).success(function(data, status, headers, config) {
-					//regreso respuesta sobre upload, aun no confirmamos si subio
-					console.log('i:' + i );
-          console.log(config.file.name);
-          console.log('data->');
-          console.log(data);
+					// regreso respuesta sobre upload, aun no confirmamos si subio
+					// console.log('i:' + i );
+          // console.log(config.file.name);
+          // console.log('data->');
+          // console.log(data);
 
           var r = {
-            FK_Contenido : $scope.selected_categoria_files.PK_Contenido,
-            FK_Idioma : $scope.selected_categoria_files.list_idioma[0].FK_Idioma,
-            Nombre : config.file.name
+            PK_Archivo: data.op,
+            Nombre : data.File_Name,
+            Descripcion: data.Descripcion,
+            FK_Idioma : data.FK_Idioma,
+            FK_Contenido : data.PK_Contenido,
           };
 
           $scope.progress = 0;
           $scope.uploadedArray.push(data);
           $scope.uploadedSycArray.push(r);
-          //$scope.selected_categoria.file = 'hola';
+          $scope.selectedAudios.push(r);
+
+          $scope.$emit('clear' , config.file);
+
         });
       }
 
     }
+    //vaciamos files
+
+
+
   };
 
   //-------------- ROW CONTROLLER
   $scope.detalle = function(c, index) {
+
+    this.clearArrays();
+
     $scope.selected_categoria_files = {
       "PK_Contenido": c.PK_Contenido,
       "PK_Categoria": c.PK_Categoria,
@@ -333,21 +390,31 @@ angular.module('Controllers', [])
         "traduccion": c.Traduccion
       }]
     };
+
     $scope.rowvisible = $scope.rowvisible === index ? -1 : index;
-    //$scope.selall = {'Selected' : true};
+
     if($scope.rowvisible !== -1){
       ContenidosService.audiosById(c).then(function(d) {
         console.log("ContenidosService.audiosById->");
-        console.log(d);
+        //console.log(d);
         $scope.selectedAudios = d.data.result;
-        /*$scope.categorias = d.data;
-        $scope.selectedall();*/
       });
     }
     //$scope.usuariosel = usuario.PK_Usuario;
   };
+
   $scope.evaluate = function(index) {
     return index === $scope.rowvisible;
+  };
+
+  $scope.clearArrays = function(){
+    $scope.progressArray = [];
+    $scope.selectedAudios = [];
+    $scope.selected_categoria = [];
+    $scope.selected_categoria_files = [];
+    $scope.uploadedArray = [];
+    $scope.uploadedSycArray = [];
+    console.log('clearArrays->done');
   };
 
 })
@@ -781,6 +848,5 @@ angular.module('Controllers', [])
             }
         });
      }
-   }
+   };
  });
-;
