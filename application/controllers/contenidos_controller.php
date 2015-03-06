@@ -203,22 +203,8 @@ class Contenidos_controller extends CI_Controller {
 
 	}
 
-	public function delete_contenido(){
-
-		$data = json_decode(file_get_contents('php://input'), true);
-
-		$arr = array(
-			'result' => array(
-				'PK_Contenido' => $data
-			),
-			'errors' => array(),
-		);
-
-		$arr['op']= $this->Contenidos_model->delete_contenido($data);
-
-		header ('Content-type: application/json; charset=utf-8');
-		echo json_encode($arr);
-	}
+	public function delete_contenido(){		$data = json_decode(file_get_contents('php://input'), true);		$arr = array(			'result' => array(				'PK_Contenido' => $data			),			'errors' => array(),		);		$arr['op']= $this->Contenidos_model->delete_contenido($data);		header ('Content-type: application/json; charset=utf-8');		echo json_encode($arr);
+	}	public function delete_archivo(){		$data = json_decode(file_get_contents('php://input'), true);		$arr = array(			'result' => array(				'PK_Archivo' => $data['PK_Archivo']			),			'file' => $data,			'errors' => array(),		);		$arr['op'] = $this->Contenidos_model->delete_archivo($data['PK_Archivo']);		if($arr['op'] == true){			unlink("./uploads/".$data['Nombre']); 		}		header ('Content-type: application/json; charset=utf-8');		echo json_encode($arr);	}
 
 	public function upload()
 	{

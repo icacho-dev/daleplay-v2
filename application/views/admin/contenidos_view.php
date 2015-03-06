@@ -131,10 +131,11 @@
                     <div class="container" ng-repeat="audio in selectedAudios">
                       <div class="col one_full audio-col">
                         <audio controls style="float:left;">
-                          <source src='{{"http://swfideas.com/ci22/uploads/"+audio.Nombre}}' type="audio/mpeg">
+                          <source ng-src="{{'http://swfideas.com/ci22/uploads/'+audio.Nombre}}" type="audio/mpeg">
                         Your browser does not support the audio element.
                         </audio>
-                        <a href="javascript:void(0)" ng-click="deleteAudio(audio)" class="audio-delete">
+                        <a href="javascript:void(0)" class="audio-delete"
+                           ng-click="delete_archivo(audio)">
                           <i class="fa fa-trash-o"></i>
                         </a>
                         <span class="audio-detalle">
@@ -150,26 +151,31 @@
                     <div class="row">
                       <section class="col one_full">
                         <div class="button btn_action1"
+                          ng-file-select
                           ng-multiple="true"
                           ng-model="files"
-                          ng-file-select ng-accept="'audio/mp3'"
+                          ng-accept="'audio/mp3'"
                           ><i class="fa fa-plus fa-lg"></i>&nbsp;Selecciona...</div>
-                        <div class="button" ng-click="upload(files)" ng-if="files.length > 0">Subir...</div>
+                        <div class="button" ng-click="upload(files)"
+                             ng-show="files.length > 0">Subir...</div>
                       </section>
 
-                      <section class="col one_full">
+                      <!-- <section class="col one_full">
                         <pre>files: {{files | json}}</pre>
                         <pre>selectedAudios: {{selectedAudios | json}}</pre>
-                      </section>
+                      </section> -->
 
 
                     </div>
-                    <div class="body dp_uploader_filedesc dp_uploader_filedesc_bar" ng-repeat="file in files">
+                    <div class="body dp_uploader_filedesc dp_uploader_filedesc_bar"
+                         ng-repeat="file in files">
                       <!-- titulo audio -->
-                      <section class="ng-scope">
+                      <section>
                         <label class="label">Descripción</label>
                         <label class="input"> <i class="icon-append icon-tag"></i>
-                          <input type="text" ng-model="file.descripcion" placeholder="Descripción" ng-maxlength="255" name="filedesc{{$index}}">
+                          <input type="text" ng-model="file.descripcion" placeholder="Descripción"
+                                 ng-maxlength="255"
+                                 name="filedesc{{$index}}">
                           <span class="error">Máximo 255 caracteres.</span>
                         </label>
                       </section>
@@ -194,9 +200,9 @@
                     <p>selected_categoria: {{selected_categoria | json}}</p>
                   </section>
                   -->
-                  <section class="col one_full">
+                  <!-- <section class="col one_full">
                     selectedAudios: {{selectedAudios | json}}
-                  </section>
+                  </section> -->
                   <!-- /consola -->
                 </div>
                 <footer>
