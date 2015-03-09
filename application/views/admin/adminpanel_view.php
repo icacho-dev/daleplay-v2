@@ -1,6 +1,6 @@
 <div class="" ng-controller="DashboardController as main">
 	<div >
-    	<div ui-view ></div>
+    	<div ui-view autoscroll="false"></div>
   	</div>
 		<!-- <div class="divider_line3"><i class="fa fa-paper-plane"></i></div>
 		<div class="container">

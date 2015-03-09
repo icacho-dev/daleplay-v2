@@ -4,19 +4,24 @@ class Login_model extends CI_Model {
 	{		parent::__construct();
 	}
 	function valida_usuarios($user, $pass)	{
-		$this->db->select('PK_Usuario, UsuarioActivo');
+		$this->db->select('PK_Usuario, UsuarioActivo, EsAdmin');
 		$this->db->from('Usuario');
     $where = "Usuario.UserName = '" . $user . "' AND Usuario.Password = '" . $pass . "'";
 		$this->db->where($where);
-		$query = $this->db->get();
+		$query = $this->db->get();		$arr = array('opValid' => -1,
+			           'EsAdmin' => false);
 		if ($query->num_rows() > 0)
 		{
 		  $row = $query->row();
-			if($row->UsuarioActivo == 'false')
-			  return 2;
-			return 0;
+			if($row->UsuarioActivo == 'false') $arr['op'] =  2;
+			else
+			{
+				$arr['op'] =  0;
+				$arr['EsAdmin'] =  $row->EsAdmin == 'true' ? true : false;
+			}
 		}
-		return 1;	}
+		else $arr['op'] = 1;
+		return $arr;	}
 }
 
 /* End of file login_model.php */

@@ -833,14 +833,16 @@ angular.module('Controllers', [])
     $scope.userarr = {'user':$scope.usuario.user,'pass':$scope.usuario.pass};
     LoginService.validaUsuario($scope.userarr).then(function(response) {
       $rootScope.uuid = null;
-      if(response.data.op == 0)
+      if(response.data.op['op'] == 0)
       {
         $rootScope.uuid = uuid2.newuuid();
-        $location.path('Dashboard');
+        $rootScope.TypeUser = response.data.op['EsAdmin'];
+        if($rootScope.TypeUser) $location.path('Dashboard');
+        else $location.path('DashboardUser');
         //dialogs.notify('Información','Usuario Valido: '+$scope.usuario.user,{'windowClass':'center-modal'});
       }
-      else if(response.data.op == 1) dialogs.notify('Información','Usuario o Contraseña Invalida: '+$scope.usuario.user,{'windowClass':'center-modal'});if(response.data == 0) dialogs.notify('Información','Usuario Valido: '+$scope.usuario.user,{'windowClass':'center-modal'});
-      else if(response.data.op == 2) dialogs.notify('Información','Usuario Inactivo: '+$scope.usuario.user,{'windowClass':'center-modal'});if(response.data == 0) dialogs.notify('Información','Usuario Valido: '+$scope.usuario.user,{'windowClass':'center-modal'});
+      else if(response.data.op['op'] == 1) dialogs.notify('Información','Usuario o Contraseña Invalida: '+$scope.usuario.user,{'windowClass':'center-modal'});if(response.data == 0) dialogs.notify('Información','Usuario Valido: '+$scope.usuario.user,{'windowClass':'center-modal'});
+      else if(response.data.op['op'] == 2) dialogs.notify('Información','Usuario Inactivo: '+$scope.usuario.user,{'windowClass':'center-modal'});if(response.data == 0) dialogs.notify('Información','Usuario Valido: '+$scope.usuario.user,{'windowClass':'center-modal'});
 
     }, function (error)
     {
