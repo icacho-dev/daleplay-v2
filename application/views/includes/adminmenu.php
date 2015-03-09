@@ -107,7 +107,7 @@
     </nav><!-- end Navigation Menu -->
 
 
-  <div class="menu_right"><a href="http://localhost/ci22/adminpanel_controller" class="buynow" ng-if="isAdmin() || isUser()">Cerrar Sesión</a></div>
+  <div class="menu_right"><a href="/ci22/adminpanel_controller" class="buynow" ng-if="isAdmin() || isUser()">Cerrar Sesión</a></div>
 
   </div>
 
