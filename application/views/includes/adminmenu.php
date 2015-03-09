@@ -39,7 +39,7 @@
 
     </nav><!-- end Navigation Menu -->
 
-    <div class="menu_right"><a href="#" class="buynow">Perfil</a></div>
+    <div class="menu_right"><a href="http://localhost/ci22/adminpanel_controller" class="buynow">Cerrar Sesión</a></div>
 
     </div>
 
@@ -54,7 +54,7 @@
 <div class="page_title2">
 <div class="container">
     <h1>{{this.titulo}}</h1>
-    <div class="pagenation">&nbsp;<a href="/ci22/adminpanel_controller">Admin Dashboard</a> <i>/</i> <a href="#">{{this.titulo}}</a></div>
+    <div class="pagenation">&nbsp;<a href="/ci22/adminpanel_controller#/Dashboard">Admin Dashboard</a> <i>/</i> <a href="#/{{this.titulo}}">{{this.titulo}}</a></div>
 
 </div>
 </div>

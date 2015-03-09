@@ -75,6 +75,7 @@
   	<script src="<?php echo base_url();?>js/angular-file-upload/angular-file-upload-shim.min.js"></script>
   	<script src="<?php echo base_url();?>js/angular-file-upload/angular-file-upload.min.js"></script>
     <script src="<?php echo base_url();?>js/app/dialogs.min.js"></script>
+    <script src="<?php echo base_url();?>js/app/angular-uuid2.min.js"></script>
   	<script src="<?php echo base_url();?>js/app/app.js"></script>
   	<script src="<?php echo base_url();?>js/app/controllers.js"></script>
 </head>

@@ -819,6 +819,37 @@ angular.module('Controllers', [])
   // LOAD DATA
   $scope.refresh();
 })
+.service('LoginService', function($location, $http, $q) {
+  //SELECT ----------------------------------------------------------------- USUARIOS
+  this.validaUsuario = function(params) {
+    return $http.post('adminpanel_controller/valida_usuarios', params);
+  };
+})
+.controller('LoginController', function($rootScope, $scope, $location, $http, $anchorScroll, $location, dialogs, LoginService, uuid2) {
+
+  console.info('ini->LoginController');
+
+  $scope.validauser = function(){
+    $scope.userarr = {'user':$scope.usuario.user,'pass':$scope.usuario.pass};
+    LoginService.validaUsuario($scope.userarr).then(function(response) {
+      $rootScope.uuid = null;
+      if(response.data.op == 0)
+      {
+        $rootScope.uuid = uuid2.newuuid();
+        $location.path('Dashboard');
+        //dialogs.notify('Información','Usuario Valido: '+$scope.usuario.user,{'windowClass':'center-modal'});
+      }
+      else if(response.data.op == 1) dialogs.notify('Información','Usuario o Contraseña Invalida: '+$scope.usuario.user,{'windowClass':'center-modal'});if(response.data == 0) dialogs.notify('Información','Usuario Valido: '+$scope.usuario.user,{'windowClass':'center-modal'});
+      else if(response.data.op == 2) dialogs.notify('Información','Usuario Inactivo: '+$scope.usuario.user,{'windowClass':'center-modal'});if(response.data == 0) dialogs.notify('Información','Usuario Valido: '+$scope.usuario.user,{'windowClass':'center-modal'});
+
+    }, function (error)
+    {
+      console.info('Error ');
+      dialogs.error('Error',error.data,{'windowClass':'center-modal'})
+    });
+  }
+
+})
 .directive("passwordVerify", function() {
    return {
       require: "ngModel",
