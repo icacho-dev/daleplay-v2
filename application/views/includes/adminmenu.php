@@ -85,13 +85,13 @@
   		        <li><a ng-click="go('Dashboard','/DashboardUser')" title="Home" class="">Dashboard</a></li>
 
   		        <li class="dropdown yamm-fw">
-                <a ng-click="go('Contenidos','/ContenidosUser')" title="Contenidos" data-toggle="dropdown" class="dropdown-toggle">Contenidos</a>
+                <a ng-click="goFiltered('ContenidosUs','/ContenidosUs',-1,'')" title="ContenidosUs" data-toggle="dropdown" class="dropdown-toggle">Contenidos</a>
                 <ul class="dropdown-menu">
                   <li>
                     <div class="yamm-content">
                       <div class="row">
                         <ul class="col-sm-6 col-md-4 list-unstyled two" ng-repeat="menu in megamenu">
-                          <li><a ng-click="goFiltered('Contenidos','/ContenidosUser',menu.FK_Categoria)" title="Contenidos" class=""><i class="fa fa-plus-square"></i>{{menu.Categoria}}</a></li>
+                          <li><a ng-click="goFiltered('ContenidosUs','/ContenidosUs',menu.FK_Categoria,menu.Categoria)" title="ContenidosUs" class=""><i class="fa fa-plus-square"></i>{{menu.Categoria}}</a></li>
                         </ul>
                       </div>
                     </div>

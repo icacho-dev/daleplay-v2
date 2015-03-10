@@ -123,8 +123,8 @@ angular.module('Controllers', [])
     return $http.get('contenidos_controller/get_model');
   };
 
-  this.get_contenidos_traducciones = function() {
-    return $http.get('contenidos_controller/get_contenidos_traducciones');
+  this.get_contenidos_traducciones = function(filter) {
+    return $http.post('contenidos_controller/get_contenidos_traducciones', filter);
   };
 
   this.save = function(contenido) {
@@ -142,7 +142,7 @@ angular.module('Controllers', [])
 
 })
 .controller('ContenidosController', function(
-  $scope, $http, $location, $fancyModal, $log, ContenidosService, $upload, dialogs) {
+  $scope, $rootScope, $http, $location, $fancyModal, $log, ContenidosService, $upload, dialogs) {
 
   $scope.list_categoria = {};
   $scope.selected_categoria = {};
@@ -280,7 +280,7 @@ angular.module('Controllers', [])
 
     });
 
-    ContenidosService.get_contenidos_traducciones().then(function(d) {
+    ContenidosService.get_contenidos_traducciones($rootScope.ListFilters).then(function(d) {
       $scope.contenidos_traducciones = d.data;
     });
 
@@ -416,7 +416,12 @@ angular.module('Controllers', [])
     $scope.uploadedSycArray = [];
     console.log('clearArrays->done');
   };
-
+  $scope.removeFilter = function(filter) {
+      $rootScope.ListFilters.splice($rootScope.ListFilters.indexOf(filter), 1);
+  };
+  $rootScope.$watchCollection('ListFilters', function(newVal) {
+       $scope.refresh();
+   });
 })
 
 .controller('ModalInstanceCtrl', function($scope, $modalInstance, items) {

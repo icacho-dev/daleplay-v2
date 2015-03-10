@@ -11,14 +11,9 @@ class Contenidos_controller extends CI_Controller {
 		$this->load->model('Categoria_Idioma_model');
 	}
 	//----------------- INDEX
-	public function index()
-	{
-
-		$data['main_content'] = 'admin/contenidos_view';
-		$this->load->view('admin/contenidos_view');
-
-	}
-
+	public function index()	{		$data['main_content'] = 'admin/contenidos_view';
+		$this->load->view('admin/contenidos_view');	}
+	public function indexuser()	{		$this->load->view('admin/contenidosuser_view');	}
 	public function get_model () {
 
 		header ('Content-type: application/json; charset=utf-8');
@@ -77,8 +72,10 @@ class Contenidos_controller extends CI_Controller {
 	}
 
 	public function get_contenidos_traducciones(){
+		$data = json_decode(file_get_contents('php://input'), true);
+
 		header ('Content-type: application/json; charset=utf-8');
-		echo json_encode($this->Contenidos_model->get_view_contenidos_traducciones_AsArray());
+		echo json_encode($this->Contenidos_model->get_view_contenidos_traducciones_AsArray($data));
 	}
 
 	public function get_archivosById() {
@@ -204,7 +201,7 @@ class Contenidos_controller extends CI_Controller {
 	}
 
 	public function delete_contenido(){		$data = json_decode(file_get_contents('php://input'), true);		$arr = array(			'result' => array(				'PK_Contenido' => $data			),			'errors' => array(),		);		$arr['op']= $this->Contenidos_model->delete_contenido($data);		header ('Content-type: application/json; charset=utf-8');		echo json_encode($arr);
-	}	public function delete_archivo(){		$data = json_decode(file_get_contents('php://input'), true);		$arr = array(			'result' => array(				'PK_Archivo' => $data['PK_Archivo']			),			'file' => $data,			'errors' => array(),		);		$arr['op'] = $this->Contenidos_model->delete_archivo($data['PK_Archivo']);		if($arr['op'] == true){			unlink("./uploads/".$data['Nombre']); 		}		header ('Content-type: application/json; charset=utf-8');		echo json_encode($arr);	}
+	}	public function delete_archivo(){		$data = json_decode(file_get_contents('php://input'), true);		$arr = array(			'result' => array(				'PK_Archivo' => $data['PK_Archivo']			),			'file' => $data,			'errors' => array(),		);		$arr['op'] = $this->Contenidos_model->delete_archivo($data['PK_Archivo']);		if($arr['op'] == true){			unlink("./uploads/".$data['Nombre']);		}		header ('Content-type: application/json; charset=utf-8');		echo json_encode($arr);	}
 
 	public function upload()
 	{
