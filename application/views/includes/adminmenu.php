@@ -60,49 +60,52 @@
     </nav><!-- end Navigation Menu -->
 
 
-        <!-- Navigation Menu -->
+    <!-- Navigation Menu -->
 
-        <nav class="menu_main"  ng-if="isUser()">
+    <nav class="menu_main"  ng-if="isUser()">
 
-          <div class="navbar yamm navbar-default">
+        <div class="navbar yamm navbar-default">
 
+  	    <div class="container">
 
+	      <div class="navbar-header">
 
-      	    <div class="container">
+          <div class="navbar-toggle .navbar-collapse .pull-right " data-toggle="collapse" data-target="#navbar-collapse-1"  > <span>Menu</span>
 
+	          <button type="button" > <i class="fa fa-bars"></i></button>
 
+          </div>
 
-      	      <div class="navbar-header">
+        </div>
 
-      	        <div class="navbar-toggle .navbar-collapse .pull-right " data-toggle="collapse" data-target="#navbar-collapse-1"  > <span>Menu</span>
+	      <div id="navbar-collapse-1" class="navbar-collapse collapse pull-right">
 
-      	          <button type="button" > <i class="fa fa-bars"></i></button>
+            <ul class="nav navbar-nav">
 
-      	        </div>
+  		        <li><a ng-click="go('Dashboard','/DashboardUser')" title="Home" class="">Dashboard</a></li>
 
-      	      </div>
+  		        <li class="dropdown yamm-fw">
+                <a ng-click="go('Contenidos','/ContenidosUser')" title="Contenidos" data-toggle="dropdown" class="dropdown-toggle">Contenidos</a>
+                <ul class="dropdown-menu">
+                  <li>
+                    <div class="yamm-content">
+                      <div class="row">
+                        <ul class="col-sm-6 col-md-4 list-unstyled two" ng-repeat="menu in megamenu">
+                          <li><a ng-click="goFiltered('Contenidos','/ContenidosUser',menu.FK_Categoria)" title="Contenidos" class=""><i class="fa fa-plus-square"></i>{{menu.Categoria}}</a></li>
+                        </ul>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </li>
 
+              <li><a ng-click="go('MyPrep','/MyPrep')" title="Usuarios" class="">Myprep</a></li>
 
+  	        </ul>
 
-      	      <div id="navbar-collapse-1" class="navbar-collapse collapse pull-right">
+  	      </div>
 
-
-
-                <ul class="nav navbar-nav">
-
-      		        <li><a ng-click="go('Dashboard','/DashboardUser')" title="Home" class="">Dashboard</a><li>
-
-      		        <li><a ng-click="go('Contenidos','/ContenidosUser')" title="Contenidos" class="">Contenidos</a><li>
-
-                  <li><a ng-click="go('MyPrep','/MyPrep')" title="Usuarios" class="">Myprep</a><li>
-
-      	        </ul>
-
-
-
-      	      </div>
-
-      	  	</div>
+  	  	</div>
    	</div>
     </nav><!-- end Navigation Menu -->
 

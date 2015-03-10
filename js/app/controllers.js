@@ -825,7 +825,7 @@ angular.module('Controllers', [])
     return $http.post('adminpanel_controller/valida_usuarios', params);
   };
 })
-.controller('LoginController', function($rootScope, $scope, $location, $http, $anchorScroll, $location, dialogs, LoginService, uuid2) {
+.controller('LoginController', function($rootScope, $scope, $location, $http, $anchorScroll, $location, dialogs, LoginService, uuid2, MegaMenuService) {
 
   console.info('ini->LoginController');
 
@@ -839,7 +839,8 @@ angular.module('Controllers', [])
         $rootScope.TypeUser = response.data.op['EsAdmin'];
         if($rootScope.TypeUser) $location.path('Dashboard');
         else $location.path('DashboardUser');
-        //dialogs.notify('Información','Usuario Valido: '+$scope.usuario.user,{'windowClass':'center-modal'});
+
+        MegaMenuService.prepForBroadcast(response.data.op['menu']);
       }
       else if(response.data.op['op'] == 1) dialogs.notify('Información','Usuario o Contraseña Invalida: '+$scope.usuario.user,{'windowClass':'center-modal'});if(response.data == 0) dialogs.notify('Información','Usuario Valido: '+$scope.usuario.user,{'windowClass':'center-modal'});
       else if(response.data.op['op'] == 2) dialogs.notify('Información','Usuario Inactivo: '+$scope.usuario.user,{'windowClass':'center-modal'});if(response.data == 0) dialogs.notify('Información','Usuario Valido: '+$scope.usuario.user,{'windowClass':'center-modal'});

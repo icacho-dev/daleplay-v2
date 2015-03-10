@@ -4,12 +4,11 @@ class Login_model extends CI_Model {
 	{		parent::__construct();
 	}
 	function valida_usuarios($user, $pass)	{
-		$this->db->select('PK_Usuario, UsuarioActivo, EsAdmin');
-		$this->db->from('Usuario');
-    $where = "Usuario.UserName = '" . $user . "' AND Usuario.Password = '" . $pass . "'";
+		$this->db->select('PK_Usuario, UsuarioActivo, EsAdmin');		$this->db->from('Usuario');    $where = "Usuario.UserName = '" . $user . "' AND Usuario.Password = '" . $pass . "'";
 		$this->db->where($where);
 		$query = $this->db->get();		$arr = array('opValid' => -1,
-			           'EsAdmin' => false);
+			           'EsAdmin' => false,
+									'menu' => array());
 		if ($query->num_rows() > 0)
 		{
 		  $row = $query->row();
@@ -18,6 +17,13 @@ class Login_model extends CI_Model {
 			{
 				$arr['op'] =  0;
 				$arr['EsAdmin'] =  $row->EsAdmin == 'true' ? true : false;
+
+				$this->db->select('FK_Categoria, Categoria');
+				$this->db->from('view_categorias_usuario');
+    		$where = "view_categorias_usuario.PK_Usuario = " . $row->PK_Usuario . " AND Exist = 'true'" ;
+				$this->db->where($where);
+				$query = $this->db->get();
+				$arr['menu'] =  $query->result_array();
 			}
 		}
 		else $arr['op'] = 1;
