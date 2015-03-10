@@ -2186,7 +2186,7 @@
 	width: 100%;
 	text-align: center;
 	padding: 140px 0px 185px 0px;
-	background: #333 url("../images/darkgray-bg1.png");
+	background: #333 url("../images/bg-admin-dashboard-2.jpg");
 	background-attachment: fixed;
 	background-origin: initial;
 	background-clip: initial;
@@ -4719,12 +4719,26 @@ div.tab-pane.ng-scope.active{
 	float: left;
 	font-size: 1.4em;
 	background: rgb(66, 66, 66);
-	padding: 0 .2em!important;
-	border-radius: .25em;
+	padding: 0 .4em!important;
+	border-radius: .25em 0 0 .25em;
 	margin: 0px 0px 0px .3em!important;
 }
 
 .audio-delete:hover {
 	color: #FFFFFF;
   background: #E54C4C;
+}
+
+.audio-download {
+	float: left;
+	font-size: 1.4em;
+	background: rgb(66, 66, 66);
+	padding: 0 .4em!important;
+	border-radius: 0 .25em .25em 0;
+	margin: 0 0 0 1px!important;
+}
+
+.audio-download:hover {
+	color: #FFFFFF;
+  background: #6EDBE9;
 }
