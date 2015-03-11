@@ -123,14 +123,15 @@
             </td>
           </tr>
           <!-- audios -->
-          <tr ng-show="evaluate($index)" class="animate fadeIn" ng-style="background:#FAFAFA">
+          <tr ng-show="evaluate($index)" class="animate fadeIn" style="background:#FAFAFA">
             <td colspan="3">
               <form class="sky-form" name="sky-form">
                 <div class="row">
                   <section class="col one_full" ng-if="selectedAudios.length > 0">
                     <div class="container" ng-repeat="audio in selectedAudios">
                       <div class="col one_full audio-col">
-                        <audio controls ng-style="float:left;" style="float:left;">
+                        <audio controls style="float:left;"
+                               preload="none">
                           <source ng-src="{{'http://swfideas.com/ci22/uploads/'+audio.Nombre}}" type="audio/mpeg">
                         Your browser does not support the audio element.
                         </audio>
@@ -183,7 +184,7 @@
                         </label>
                       </section>
                       <!--/titulo audio -->
-                      <i class="fa fa-music" ng-style="color: #E54C4C;"></i>&nbsp;&nbsp;
+                      <i class="fa fa-music" style="color: #E54C4C;"></i>&nbsp;&nbsp;
                       <span class="dp_uploader_filedesc_alt">nombre: </span>{{ file.name }}&nbsp;
                       <span class="dp_uploader_filedesc_alt">tipo: </span>{{ file.type }}&nbsp;
                       <span class="dp_uploader_filedesc_alt">tamaño: </span>{{ file.size/1048576 | number:2 }} MB&nbsp;
