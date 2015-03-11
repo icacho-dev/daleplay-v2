@@ -188,8 +188,8 @@
                       <span class="dp_uploader_filedesc_alt">tipo: </span>{{ file.type }}&nbsp;
                       <span class="dp_uploader_filedesc_alt">tamaño: </span>{{ file.size/1048576 | number:2 }} MB&nbsp;
                       <span class="dp_uploader_filedesc_alt">descripcion: </span>{{ file.descripcion }}&nbsp;
-                      <span ng-show="file.progress > 0"><span class="dp_uploader_filedesc_alt">upload: </span>{{ file.progress}} %&nbsp;<i class="fa fa-check pull-right" ng-style="color: #8CC544; font-size: 1.5em;" ng-show="file.progress == 100"></i></span>
-                      <div class="ui-progress-bar ui-container animate fadeIn" ng-show="file.progress > 0 && file.progress < 100"><div class="ui-progress" ng-style="width: {{file.progress}}%;"></div></div>
+                      <span ng-show="file.progress > 0"><span class="dp_uploader_filedesc_alt">upload: </span>{{ file.progress}} %&nbsp;<i class="fa fa-check pull-right" style="color: #8CC544; font-size: 1.5em;" ng-show="file.progress == 100"></i></span>
+                      <div class="ui-progress-bar ui-container animate fadeIn" ng-show="file.progress > 0 && file.progress < 100"><div class="ui-progress" style="width: {{file.progress}}%;"></div></div>
                     </div>
                   </section>
                   <!-- consola -->
