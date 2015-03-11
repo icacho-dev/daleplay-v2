@@ -8,7 +8,8 @@ class Login_model extends CI_Model {
 		$this->db->where($where);
 		$query = $this->db->get();		$arr = array('opValid' => -1,
 			           'EsAdmin' => false,
-									'menu' => array());
+									'menu' => array(),
+									'PK_Usuario' => -1);
 		if ($query->num_rows() > 0)
 		{
 		  $row = $query->row();
@@ -16,7 +17,8 @@ class Login_model extends CI_Model {
 			else
 			{
 				$arr['op'] =  0;
-				$arr['EsAdmin'] =  $row->EsAdmin == 'true' ? true : false;
+				$arr['EsAdmin'] = $row->EsAdmin == 'true' ? true : false;
+				$arr['PK_Usuario'] = $row->PK_Usuario;
 
 				$this->db->select('FK_Categoria, Categoria');
 				$this->db->from('view_categorias_usuario');

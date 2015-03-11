@@ -75,7 +75,7 @@ class Contenidos_controller extends CI_Controller {
 		$data = json_decode(file_get_contents('php://input'), true);
 
 		header ('Content-type: application/json; charset=utf-8');
-		echo json_encode($this->Contenidos_model->get_view_contenidos_traducciones_AsArray($data));
+		echo json_encode($this->Contenidos_model->get_view_contenidos_traducciones_AsArray($data['ListFilters'], $data['IsAdmin'], $data['PK_Usuario']));
 	}
 
 	public function get_archivosById() {

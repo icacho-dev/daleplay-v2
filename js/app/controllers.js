@@ -142,7 +142,7 @@ angular.module('Controllers', [])
 
 })
 .controller('ContenidosController', function(
-  $scope, $rootScope, $http, $location, $fancyModal, $log, ContenidosService, $upload, dialogs) {
+  $scope, $rootScope, $http, $location, $fancyModal, $log, ContenidosService, $upload, dialogs, AuthService) {
 
   $scope.list_categoria = {};
   $scope.selected_categoria = {};
@@ -279,8 +279,11 @@ angular.module('Controllers', [])
         $scope.skyform.$setPristine();
 
     });
-
-    ContenidosService.get_contenidos_traducciones($rootScope.ListFilters).then(function(d) {
+    var $params = {};
+    $params['IsAdmin'] = AuthService.isAuthAdmin();
+    $params['ListFilters'] = $rootScope.ListFilters;
+    $params['PK_Usuario'] = $rootScope.PK_Usuario;
+    ContenidosService.get_contenidos_traducciones($params).then(function(d) {
       $scope.contenidos_traducciones = d.data;
     });
 
@@ -842,6 +845,7 @@ angular.module('Controllers', [])
       {
         $rootScope.uuid = uuid2.newuuid();
         $rootScope.TypeUser = response.data.op['EsAdmin'];
+        $rootScope.PK_Usuario = response.data.op['PK_Usuario'];
         if($rootScope.TypeUser) $location.path('Dashboard');
         else $location.path('DashboardUser');
 
