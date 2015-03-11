@@ -111,7 +111,7 @@
             </td>
             <td>
               <h5>{{contenido.Titulo}}</h5>
-              <!--<p style=" white-space: pre-line; ">{{ contenido.Traduccion | limitTo: 200 }}{{contenido.Traduccion.length > 200 ? '...' : ''}}</p>-->
+              <!--<p ng-style=" white-space: pre-line; ">{{ contenido.Traduccion | limitTo: 200 }}{{contenido.Traduccion.length > 200 ? '...' : ''}}</p>-->
               <p>{{ contenido.Traduccion | limitTo: 200 }}{{contenido.Traduccion.length > 200 ? '...' : ''}}</p>
               <span class="dp_tinydetail2 ">PUBLICADO: {{ contenido.CT_CreatedDate | timestamp | date: 'MMM d, yyyy HH:mm:ss' }}</span>
             </td>
@@ -123,14 +123,14 @@
             </td>
           </tr>
           <!-- audios -->
-          <tr ng-show="evaluate($index)" class="animate fadeIn" style="background:#FAFAFA">
+          <tr ng-show="evaluate($index)" class="animate fadeIn" ng-style="background:#FAFAFA">
             <td colspan="3">
               <form class="sky-form" name="sky-form">
                 <div class="row">
                   <section class="col one_full" ng-if="selectedAudios.length > 0">
                     <div class="container" ng-repeat="audio in selectedAudios">
                       <div class="col one_full audio-col">
-                        <audio controls style="float:left;">
+                        <audio controls ng-style="float:left;" style="float:left;">
                           <source ng-src="{{'http://swfideas.com/ci22/uploads/'+audio.Nombre}}" type="audio/mpeg">
                         Your browser does not support the audio element.
                         </audio>
@@ -138,11 +138,14 @@
                            ng-click="delete_archivo(audio)">
                           <i class="fa fa-trash-o"></i>
                         </a>
+                        <a href="{{'http://swfideas.com/ci22/uploads/'+audio.Nombre}}" class="audio-download"
+                           target="_self" download="{{audio.Nombre}}">
+                          <i class="fa fa-download"></i>
+                        </a>
                         <span class="audio-detalle">
                           <strong>Descripción:</strong>
                             {{audio.Descripcion}}
                         </span>
-
                       </div>
                     </div>
                   </section>
@@ -180,13 +183,13 @@
                         </label>
                       </section>
                       <!--/titulo audio -->
-                      <i class="fa fa-music" style="color: #E54C4C;"></i>&nbsp;&nbsp;
+                      <i class="fa fa-music" ng-style="color: #E54C4C;"></i>&nbsp;&nbsp;
                       <span class="dp_uploader_filedesc_alt">nombre: </span>{{ file.name }}&nbsp;
                       <span class="dp_uploader_filedesc_alt">tipo: </span>{{ file.type }}&nbsp;
                       <span class="dp_uploader_filedesc_alt">tamaño: </span>{{ file.size/1048576 | number:2 }} MB&nbsp;
                       <span class="dp_uploader_filedesc_alt">descripcion: </span>{{ file.descripcion }}&nbsp;
-                      <span ng-show="file.progress > 0"><span class="dp_uploader_filedesc_alt">upload: </span>{{ file.progress}} %&nbsp;<i class="fa fa-check pull-right" style="color: #8CC544; font-size: 1.5em;" ng-show="file.progress == 100"></i></span>
-                      <div class="ui-progress-bar ui-container animate fadeIn" ng-show="file.progress > 0 && file.progress < 100"><div class="ui-progress" style="width: {{file.progress}}%;"></div></div>
+                      <span ng-show="file.progress > 0"><span class="dp_uploader_filedesc_alt">upload: </span>{{ file.progress}} %&nbsp;<i class="fa fa-check pull-right" ng-style="color: #8CC544; font-size: 1.5em;" ng-show="file.progress == 100"></i></span>
+                      <div class="ui-progress-bar ui-container animate fadeIn" ng-show="file.progress > 0 && file.progress < 100"><div class="ui-progress" ng-style="width: {{file.progress}}%;"></div></div>
                     </div>
                   </section>
                   <!-- consola -->
