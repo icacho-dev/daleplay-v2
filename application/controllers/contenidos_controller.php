@@ -12,8 +12,7 @@ class Contenidos_controller extends CI_Controller {
 	}
 	//----------------- INDEX
 	public function index()	{		$data['main_content'] = 'admin/contenidos_view';
-		$this->load->view('admin/contenidos_view');	}
-	public function indexuser()	{		$this->load->view('admin/contenidosuser_view');	}
+		$this->load->view('admin/contenidos_view');	}	public function indexuser()	{		$this->load->view('admin/contenidosuser_view');	}	public function indexshow()	{		$this->load->view('admin/contenidosshow_view');	}
 	public function get_model () {
 
 		header ('Content-type: application/json; charset=utf-8');
@@ -74,8 +73,8 @@ class Contenidos_controller extends CI_Controller {
 	public function get_contenidos_traducciones(){
 		$data = json_decode(file_get_contents('php://input'), true);
 
-		header ('Content-type: application/json; charset=utf-8');
-		echo json_encode($this->Contenidos_model->get_view_contenidos_traducciones_AsArray($data['ListFilters'], $data['IsAdmin'], $data['PK_Usuario']));
+		header ('Content-type: application/json; charset=utf-8');		$IsFavoritos = isset($data['IsFavoritos']) ? $data['IsFavoritos'] : false;
+		echo json_encode($this->Contenidos_model->get_view_contenidos_traducciones_AsArray($data['ListFilters'], $data['IsAdmin'], $data['PK_Usuario'], $IsFavoritos));
 	}
 
 	public function get_archivosById() {
@@ -244,7 +243,7 @@ class Contenidos_controller extends CI_Controller {
 		header ('Content-type: application/json; charset=utf-8');
 		echo json_encode($arr);
 	}
-
+	public function favorito()	{		$data = json_decode(file_get_contents('php://input'), true);		$arr = array(			'op' => -1,			'errors' => array(),		);		$arr['op']= $this->Contenidos_model->favorito($data['FK_Contenido'], $data['FK_Usuario'], $data);		header ('Content-type: application/json; charset=utf-8');		echo json_encode($arr);	}
 }
 
 /* End of file contenidos_controller.php */

@@ -30,17 +30,6 @@
   </div>
   </script>
   <!--/modal -->
-
-  <div class="one_full">
-    <h3>
-      <strong>Filtros</strong>
-    </h3>
-    <ul class="list_empty">
-      <li ng-repeat="filter in ListFilters">
-        <a ng-click="removeFilter(filter)" class="but_remove_2"><i class="fa fa-times fa-lg"></i>&nbsp;{{filter.Categoria}}</a>
-      </li>
-    </ul>
-  </div>
   <div class="one_full">
 
     <div class="table">
@@ -66,7 +55,6 @@
               <span class="dp_tinydetail2 ">PUBLICADO: {{ contenido.CT_CreatedDate | timestamp | date: 'MMM d, yyyy HH:mm:ss' }}</span>
             </td>
             <td class="alicent dp_actions">
-              <a href="javascript:void(0)" class="smlinks" ng-click="myprep(contenido)"><i class="fa" ng-class="{'fa-star' : contenido.FK_Contenido != null, 'fa-star-o' : contenido.FK_Contenido == null}"></i> Favoritos</a>
               <a href="javascript:void(0)" class="smlinks" ng-click="modalAndCtrl(contenido)"><i class="fa fa-eye"></i> Ver</a>
               <a href="javascript:void(0)" class="smlinks" ng-click="detalle(contenido, $index)"><i class="fa fa-file-sound-o"></i> Audio</a>
             </td>

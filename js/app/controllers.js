@@ -140,6 +140,11 @@ angular.module('Controllers', [])
     return $http.post('contenidos_controller/get_archivosById', categoria);
   };
 
+  this.favorito = function(contenido)
+  {
+    return $http.post('contenidos_controller/favorito', contenido);
+  }
+
 })
 .controller('ContenidosController', function(
   $scope, $rootScope, $http, $location, $fancyModal, $log, ContenidosService, $upload, dialogs, AuthService) {
@@ -283,6 +288,7 @@ angular.module('Controllers', [])
     $params['IsAdmin'] = AuthService.isAuthAdmin();
     $params['ListFilters'] = $rootScope.ListFilters;
     $params['PK_Usuario'] = $rootScope.PK_Usuario;
+    $params['IsFavoritos'] = $rootScope.IsFavoritos;
     ContenidosService.get_contenidos_traducciones($params).then(function(d) {
       $scope.contenidos_traducciones = d.data;
     });
@@ -425,6 +431,19 @@ angular.module('Controllers', [])
   $rootScope.$watchCollection('ListFilters', function(newVal) {
        $scope.refresh();
    });
+
+  $scope.myprep = function(contenido){
+    console.info('Favoritos '+contenido.PK_Contenido);
+    var params = {'FK_Contenido':contenido.PK_Contenido,'FK_Usuario':$rootScope.PK_Usuario};
+    ContenidosService.favorito(params).then(function(response) {
+      contenido.FK_Contenido = response.data['op'];
+
+    }, function (error)
+    {
+      console.info('Error ');
+      dialogs.error('Error',error.data,{'windowClass':'center-modal'})
+    });
+  }
 })
 
 .controller('ModalInstanceCtrl', function($scope, $modalInstance, items) {
@@ -813,8 +832,8 @@ angular.module('Controllers', [])
   };
   //SAVE ALL CATS BY USER
   $scope.savecats = function(){
-    $scope.arrcategorias = {'categorias_list':$scope.categorias,'PK_Usuario':$scope.usuario.PK_Usuario};
-    UsuariosService.savecats($scope.arrcategorias).then(function(d) {
+    var arrcategorias = {'categorias_list':$scope.categorias,'PK_Usuario':$scope.usuario.PK_Usuario};
+    UsuariosService.savecats(arrcategorias).then(function(d) {
       $scope.rowvisible = -1;
       dialogs.notify('Información','Privilegios Actualizados: '+$scope.usuario.UserName,{'windowClass':'center-modal'});
     }, function (error)

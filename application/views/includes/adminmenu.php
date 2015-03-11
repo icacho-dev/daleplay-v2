@@ -99,7 +99,7 @@
                 </ul>
               </li>
 
-              <li><a ng-click="go('MyPrep','/MyPrep')" title="Usuarios" class="">Myprep</a></li>
+              <li><a ng-click="go('MiShow','/MiShow')" title="MiShow" class="">MiShow</a></li>
 
   	        </ul>
 
