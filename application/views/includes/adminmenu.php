@@ -82,8 +82,6 @@
 
             <ul class="nav navbar-nav">
 
-  		        <li><a ng-click="go('Dashboard','/DashboardUser')" title="Home" class="">Dashboard</a></li>
-
   		        <li class="dropdown yamm-fw">
                 <a ng-click="goFiltered('ContenidosUs','/ContenidosUs',-1,'')" title="ContenidosUs" data-toggle="dropdown" class="dropdown-toggle">Contenidos</a>
                 <ul class="dropdown-menu">

@@ -866,7 +866,7 @@ angular.module('Controllers', [])
         $rootScope.TypeUser = response.data.op['EsAdmin'];
         $rootScope.PK_Usuario = response.data.op['PK_Usuario'];
         if($rootScope.TypeUser) $location.path('Dashboard');
-        else $location.path('DashboardUser');
+        else $location.path('ContenidosUs');
 
         MegaMenuService.prepForBroadcast(response.data.op['menu']);
       }
