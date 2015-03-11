@@ -317,7 +317,7 @@ angular.module('Controllers', [])
   {
     console.info('$scope.files' , $scope.files);
     console.info('clear' , file);
-
+    $scope.files.splice($scope.files.indexOf(file), 1);
   });
 
   $scope.$watch('files' , function() {
@@ -329,7 +329,7 @@ angular.module('Controllers', [])
   $scope.upload = function(files) {
 
     console.info('$scope.files' , $scope.files);
-
+    $scope.files = files;
     if (files.length > 0) {
 
       for (var i = 0; i < files.length; i++) {
