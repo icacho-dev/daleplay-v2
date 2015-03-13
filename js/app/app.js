@@ -1,66 +1,26 @@
-angular.module('App',[
-	'ui.bootstrap',
-	'dialogs.main',
-	'ui.router',
-	'srph.timestamp-filter',
-	'vesparny.fancyModal',
-	'angularFileUpload',
-	'Controllers'
-	])
+angular.module('App',[	'ui.bootstrap',	'dialogs.main',	'ui.router',	'srph.timestamp-filter',	'vesparny.fancyModal',	'angularFileUpload',	'Controllers',	'angularUUID2'	])
 	.config(function($stateProvider, $urlRouterProvider){
-
-
-			$urlRouterProvider.otherwise('/Dashboard');
-			$stateProvider
-
-	        // HOME STATES AND NESTED VIEWS ========================================
-	        .state('Dashboard', {
-	            url: '/Dashboard',
-							templateUrl: '/ci22/adminpanel_controller/dashboard'
-	        })
-					.state('Categorias', {
-	            url: '/Categorias',
-							templateUrl: '/ci22/categorias_controller',
-							controller: 'Categoriasv2Controller'
-	        })
-					.state('Idiomas', {
-	            url: '/Idiomas',
-							templateUrl: '/ci22/idiomas_controller',
-							controller: 'IdiomasController'
-	        })
-					.state('Contenidos', {
-	            url: '/Contenidos',
-							templateUrl: '/ci22/contenidos_controller',
-							controller: 'ContenidosController'
-	        })
-					.state('Usuarios', {
-	            url: '/Usuarios',
-							templateUrl: '/ci22/usuario_controller',
-							controller: 'UsuariosController'
-	        })
-					;
-})
-.controller('DashboardController',
-  function($scope,$location) {
-
-		console.info('ini DashboardController ');
-
-		$scope.titulo = 'Dashboard';
-		var path = $location.path();
-		switch(path)
-		{
-			case '/Categorias': $scope.titulo = 'Categorias';break;
-			case '/Idiomas': $scope.titulo = 'Idiomas';break;
-			case '/Contenidos': $scope.titulo = 'Contenidos';break;
-			case '/Usuarios': $scope.titulo = 'Usuarios';break;
-		}
-		$location.hash('');
-
-    $scope.go = function(newtitulo,path) {
-    	$scope.titulo = newtitulo;
-    	console.info(path);
-			$location.path( path );
-			$location.hash('');
-  	}
-})
-;
+			$urlRouterProvider.otherwise('/Login');
+			$stateProvider
+	        // HOME STATES AND NESTED VIEWS ========================================					.state('Login', {
+	            url: '/Login',
+							templateUrl: '/ci22/adminpanel_controller/login',
+							controller: 'LoginController',
+      				authenticate: false,
+							Title : 'Login',
+							cache: false,
+							Admin: false
+					})
+	        .state('Dashboard', {	            url: '/Dashboard',							templateUrl: '/ci22/adminpanel_controller/dashboard',      				authenticate: true,							Title : 'Dashboard',							cache: false,							Admin: true	        })					.state('Categorias', {	            url: '/Categorias',							templateUrl: '/ci22/categorias_controller',							controller: 'Categoriasv2Controller',      				authenticate: true,							Title : 'Categorias',							cache: false,							Admin: true	        })					.state('Idiomas', {	            url: '/Idiomas',							templateUrl: '/ci22/idiomas_controller',							controller: 'IdiomasController',      				authenticate: true,							Title : 'Idiomas',							cache: false,							Admin: true	        })					.state('Contenidos', {	            url: '/Contenidos',							templateUrl: '/ci22/contenidos_controller',							controller: 'ContenidosController',      				authenticate: true,							Title : 'Contenidos',							cache: false,							Admin: true	        })					.state('Usuarios', {	            url: '/Usuarios',							templateUrl: '/ci22/usuario_controller',							controller: 'UsuariosController',      				authenticate: true,							Title : 'Usuarios',							cache: false,							Admin: true	        })					.state('ContenidosUs', {	            url: '/ContenidosUs',							templateUrl: '/ci22/contenidos_controller/indexuser',							controller: 'ContenidosController',      				authenticate: true,							Title : 'ContenidosUs',							cache: false,							Admin: false	        })					.state('MiShow', {	            url: '/MiShow',							templateUrl: '/ci22/contenidos_controller/indexshow',							controller: 'ContenidosController',      				authenticate: true,							Title : 'MiShow',							cache: false,							Admin: false,							IsFavoritos: true	        })					;}).factory('TitleMenuService', function($rootScope) {    var sharedService = {};    sharedService.titulo = '';    sharedService.prepForBroadcast = function(newtitulo) {        this.titulo = newtitulo;        this.broadcastItem();    };    sharedService.broadcastItem = function() {        $rootScope.$broadcast('handleTitleBroadcast');    };    return sharedService;}).factory('MegaMenuService', function($rootScope) {    var sharedMegaMenuService = {};		sharedMegaMenuService.menu = {};		sharedMegaMenuService.prepForBroadcast = function(newmenu) {        this.menu = newmenu;        this.broadcastItem();    };		sharedMegaMenuService.broadcastItem = function() {        $rootScope.$broadcast('handleMegaMenuBroadcast');    };    return sharedMegaMenuService;}).run(function ($rootScope, $state, AuthService, TitleMenuService) {  $rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams){		TitleMenuService.prepForBroadcast(toState.Title);		$rootScope.IsFavoritos = toState.IsFavoritos;		if(toState.url == '/Login')		{			$rootScope.uuid = null;			$rootScope.ListFilters = [];		}		else if (toState.authenticate && (!AuthService.isAuthenticated() || !(toState.Admin == AuthService.isAuthAdmin())))		{      $state.transitionTo("Login");      event.preventDefault();			$rootScope.ListFilters = [];    }	});}).controller('DashboardController',
+  function($scope, $rootScope, $location, AuthService, TitleMenuService, MegaMenuService) {		console.info('ini DashboardController ');		$scope.titulo = 'Login';		var path = $location.path();		$scope.megamenu = {};		$rootScope.uuid = null;		$rootScope.ListFilters = [];		$rootScope.TypeUser = false;		$rootScope.PK_Usuario = -1;		$rootScope.IsFavoritos = false;
+		if(AuthService.isAuthenticated())
+		{
+			switch(path)
+			{
+				case '/Categorias': $scope.titulo = 'Categorias';break;
+				case '/Idiomas': $scope.titulo = 'Idiomas';break;
+				case '/Contenidos': $scope.titulo = 'Contenidos';break;
+				case '/Usuarios': $scope.titulo = 'Usuarios';break;
+			}
+		}
+		$location.hash('');    $scope.go = function(newtitulo,path) {			if(AuthService.isAuthenticated()) $scope.titulo = newtitulo;    	console.info(path);			$location.path( path );			$location.hash('');			$rootScope.ListFilters = [];  	}    $scope.goFiltered = function(newtitulo, path, FilterId, Categoria) {			if(AuthService.isAuthenticated()) $scope.titulo = newtitulo;    	console.info(path);			$location.path( path );			$location.hash('');			if(FilterId == -1) $rootScope.ListFilters = [];			else			{				$scope.foundFilter = false;				angular.forEach($rootScope.ListFilters, function(item)				{			    if(item.FK_Categoria == FilterId)					{						$scope.foundFilter = true;					}			  })				if(!$scope.foundFilter)				{					var filter = {};					filter.FK_Categoria = FilterId;					filter.Categoria = Categoria;	      	$rootScope.ListFilters.push(filter);				}			}  	}		$scope.$on('handleTitleBroadcast', function() {			if(AuthService.isAuthenticated()) $scope.titulo = TitleMenuService.titulo;    })		$scope.$on('handleMegaMenuBroadcast', function() {			$scope.megamenu = MegaMenuService.menu;    })		$scope.isAdmin = function() {    	return AuthService.isAuthenticated() && $rootScope.TypeUser == true;  	};		$scope.isUser = function() {    	return AuthService.isAuthenticated() && $rootScope.TypeUser == false;  	};}).service('AuthService', function($rootScope) {  this.isAuthenticated = function() {    return $rootScope.uuid !== null;  };	this.isAuthAdmin = function() {    return $rootScope.TypeUser;  };});

@@ -123,8 +123,8 @@ angular.module('Controllers', [])
     return $http.get('contenidos_controller/get_model');
   };
 
-  this.get_contenidos_traducciones = function() {
-    return $http.get('contenidos_controller/get_contenidos_traducciones');
+  this.get_contenidos_traducciones = function(filter) {
+    return $http.post('contenidos_controller/get_contenidos_traducciones', filter);
   };
 
   this.save = function(contenido) {
@@ -140,9 +140,14 @@ angular.module('Controllers', [])
     return $http.post('contenidos_controller/get_archivosById', categoria);
   };
 
+  this.favorito = function(contenido)
+  {
+    return $http.post('contenidos_controller/favorito', contenido);
+  }
+
 })
 .controller('ContenidosController', function(
-  $scope, $http, $location, $fancyModal, $log, ContenidosService, $upload, dialogs) {
+  $scope, $rootScope, $http, $location, $fancyModal, $log, ContenidosService, $upload, dialogs, AuthService) {
 
   $scope.list_categoria = {};
   $scope.selected_categoria = {};
@@ -279,8 +284,12 @@ angular.module('Controllers', [])
         $scope.skyform.$setPristine();
 
     });
-
-    ContenidosService.get_contenidos_traducciones().then(function(d) {
+    var $params = {};
+    $params['IsAdmin'] = AuthService.isAuthAdmin();
+    $params['ListFilters'] = $rootScope.ListFilters;
+    $params['PK_Usuario'] = $rootScope.PK_Usuario;
+    $params['IsFavoritos'] = $rootScope.IsFavoritos;
+    ContenidosService.get_contenidos_traducciones($params).then(function(d) {
       $scope.contenidos_traducciones = d.data;
     });
 
@@ -308,7 +317,7 @@ angular.module('Controllers', [])
   {
     console.info('$scope.files' , $scope.files);
     console.info('clear' , file);
-
+    $scope.files.splice($scope.files.indexOf(file), 1);
   });
 
   $scope.$watch('files' , function() {
@@ -320,7 +329,7 @@ angular.module('Controllers', [])
   $scope.upload = function(files) {
 
     console.info('$scope.files' , $scope.files);
-
+    $scope.files = files;
     if (files.length > 0) {
 
       for (var i = 0; i < files.length; i++) {
@@ -416,7 +425,25 @@ angular.module('Controllers', [])
     $scope.uploadedSycArray = [];
     console.log('clearArrays->done');
   };
+  $scope.removeFilter = function(filter) {
+      $rootScope.ListFilters.splice($rootScope.ListFilters.indexOf(filter), 1);
+  };
+  $rootScope.$watchCollection('ListFilters', function(newVal) {
+       $scope.refresh();
+   });
 
+  $scope.myprep = function(contenido){
+    console.info('Favoritos '+contenido.PK_Contenido);
+    var params = {'FK_Contenido':contenido.PK_Contenido,'FK_Usuario':$rootScope.PK_Usuario};
+    ContenidosService.favorito(params).then(function(response) {
+      contenido.FK_Contenido = response.data['op'];
+
+    }, function (error)
+    {
+      console.info('Error ');
+      dialogs.error('Error',error.data,{'windowClass':'center-modal'})
+    });
+  }
 })
 
 .controller('ModalInstanceCtrl', function($scope, $modalInstance, items) {
@@ -805,8 +832,8 @@ angular.module('Controllers', [])
   };
   //SAVE ALL CATS BY USER
   $scope.savecats = function(){
-    $scope.arrcategorias = {'categorias_list':$scope.categorias,'PK_Usuario':$scope.usuario.PK_Usuario};
-    UsuariosService.savecats($scope.arrcategorias).then(function(d) {
+    var arrcategorias = {'categorias_list':$scope.categorias,'PK_Usuario':$scope.usuario.PK_Usuario};
+    UsuariosService.savecats(arrcategorias).then(function(d) {
       $scope.rowvisible = -1;
       dialogs.notify('Información','Privilegios Actualizados: '+$scope.usuario.UserName,{'windowClass':'center-modal'});
     }, function (error)
@@ -818,6 +845,41 @@ angular.module('Controllers', [])
 
   // LOAD DATA
   $scope.refresh();
+})
+.service('LoginService', function($location, $http, $q) {
+  //SELECT ----------------------------------------------------------------- USUARIOS
+  this.validaUsuario = function(params) {
+    return $http.post('adminpanel_controller/valida_usuarios', params);
+  };
+})
+.controller('LoginController', function($rootScope, $scope, $location, $http, $anchorScroll, $location, dialogs, LoginService, uuid2, MegaMenuService) {
+
+  console.info('ini->LoginController');
+
+  $scope.validauser = function(){
+    $scope.userarr = {'user':$scope.usuario.user,'pass':$scope.usuario.pass};
+    LoginService.validaUsuario($scope.userarr).then(function(response) {
+      $rootScope.uuid = null;
+      if(response.data.op['op'] == 0)
+      {
+        $rootScope.uuid = uuid2.newuuid();
+        $rootScope.TypeUser = response.data.op['EsAdmin'];
+        $rootScope.PK_Usuario = response.data.op['PK_Usuario'];
+        if($rootScope.TypeUser) $location.path('Dashboard');
+        else $location.path('ContenidosUs');
+
+        MegaMenuService.prepForBroadcast(response.data.op['menu']);
+      }
+      else if(response.data.op['op'] == 1) dialogs.notify('Información','Usuario o Contraseña Invalida: '+$scope.usuario.user,{'windowClass':'center-modal'});if(response.data == 0) dialogs.notify('Información','Usuario Valido: '+$scope.usuario.user,{'windowClass':'center-modal'});
+      else if(response.data.op['op'] == 2) dialogs.notify('Información','Usuario Inactivo: '+$scope.usuario.user,{'windowClass':'center-modal'});if(response.data == 0) dialogs.notify('Información','Usuario Valido: '+$scope.usuario.user,{'windowClass':'center-modal'});
+
+    }, function (error)
+    {
+      console.info('Error ');
+      dialogs.error('Error',error.data,{'windowClass':'center-modal'})
+    });
+  }
+
 })
 .directive("passwordVerify", function() {
    return {

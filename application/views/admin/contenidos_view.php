@@ -111,7 +111,7 @@
             </td>
             <td>
               <h5>{{contenido.Titulo}}</h5>
-              <!--<p style=" white-space: pre-line; ">{{ contenido.Traduccion | limitTo: 200 }}{{contenido.Traduccion.length > 200 ? '...' : ''}}</p>-->
+              <!--<p ng-style=" white-space: pre-line; ">{{ contenido.Traduccion | limitTo: 200 }}{{contenido.Traduccion.length > 200 ? '...' : ''}}</p>-->
               <p>{{ contenido.Traduccion | limitTo: 200 }}{{contenido.Traduccion.length > 200 ? '...' : ''}}</p>
               <span class="dp_tinydetail2 ">PUBLICADO: {{ contenido.CT_CreatedDate | timestamp | date: 'MMM d, yyyy HH:mm:ss' }}</span>
             </td>
@@ -130,7 +130,8 @@
                   <section class="col one_full" ng-if="selectedAudios.length > 0">
                     <div class="container" ng-repeat="audio in selectedAudios">
                       <div class="col one_full audio-col">
-                        <audio controls style="float:left;">
+                        <audio controls style="float:left;"
+                               preload="none">
                           <source ng-src="{{'http://swfideas.com/ci22/uploads/'+audio.Nombre}}" type="audio/mpeg">
                         Your browser does not support the audio element.
                         </audio>
@@ -138,11 +139,14 @@
                            ng-click="delete_archivo(audio)">
                           <i class="fa fa-trash-o"></i>
                         </a>
+                        <a href="{{'http://swfideas.com/ci22/uploads/'+audio.Nombre}}" class="audio-download"
+                           target="_self" download="{{audio.Nombre}}">
+                          <i class="fa fa-download"></i>
+                        </a>
                         <span class="audio-detalle">
                           <strong>Descripción:</strong>
                             {{audio.Descripcion}}
                         </span>
-
                       </div>
                     </div>
                   </section>
