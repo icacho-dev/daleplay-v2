@@ -83,6 +83,10 @@
                           <source ng-src="{{'http://swfideas.com/ci22/uploads/'+audio.Nombre}}" type="audio/mpeg">
                         Your browser does not support the audio element.
                         </audio>
+                        <a href="{{'http://swfideas.com/ci22/uploads/'+audio.Nombre}}" class="audio-download"
+                           target="_self" download="{{audio.Nombre}}">
+                          <i class="fa fa-download"></i>
+                        </a>
                         <span class="audio-detalle">
                           <strong>Descripción:</strong>
                             {{audio.Descripcion}}
