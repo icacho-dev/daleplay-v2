@@ -20,8 +20,7 @@ class Usuario_model extends CI_Model {
 	   return $this->db->get('Usuario')->result_array();
 	}
 
-	function insert_usuario(& $data)
-	{		$this->db->select('PK_Usuario');
+	function insert_usuario(& $data)	{		$this->db->select('PK_Usuario');
 		$this->db->from('Usuario');
 		$where = "Usuario.UserName = '" . $data['result']['UserName']."'";
 		$this->db->where($where);
@@ -37,7 +36,7 @@ class Usuario_model extends CI_Model {
 			$id = $this->db->insert_id() ;
 		}
 		return $id;
-	}	function edit_usuario(& $data , $id)	{		$this->db->select('PK_Usuario');		$this->db->from('Usuario');		$where = "Usuario.UserName = '" . $data['result']['UserName']."' AND Usuario.PK_Usuario != ".$id;		$this->db->where($where);		$query = $this->db->get();		if ($query->num_rows() > 0)		{			$data['op'] = false;		}		else{			$data['op'] = true;			$this->db->where('PK_Usuario', $id);			$this->db->update('Usuario', $data['result']);		}		return $id;	}
+	}	function edit_usuario(& $data , $id)	{		$this->db->select('PK_Usuario');		$this->db->from('Usuario');		$where = "Usuario.UserName = '" . $data['result']['UserName']."' AND Usuario.PK_Usuario != ".$id;		$this->db->where($where);		$query = $this->db->get();		if ($query->num_rows() > 0)		{			$data['op'] = false;		}		else{			$data['op'] = true;			$this->db->where('PK_Usuario', $id);			$this->db->update('Usuario', $data['result']);		}		return $id;	}
 
 	function insert_categoria_usuario($data)
 	{
