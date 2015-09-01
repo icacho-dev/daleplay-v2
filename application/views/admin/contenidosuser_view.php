@@ -42,7 +42,19 @@
     </ul>
   </div>
   <div class="one_full">
-
+    <div class="row">
+      <div class="col-xs-4">
+        <h3>Página Actual: {{ currentPage }}</h3>
+      </div>
+      <div class="col-xs-4">
+        <label for="search">Buscar:</label>
+        <input ng-model="q" id="search" class="form-control" placeholder="Filter text">
+      </div>
+      <div class="col-xs-4">
+        <label for="search">Contenidos por página:</label>
+        <input type="number" min="1" max="100" class="form-control" ng-model="pageSize">
+      </div>
+    </div>
     <div class="table">
       <table border="0" cellpadding="4" cellspacing="0" class="table">
         <thead>
@@ -52,7 +64,7 @@
             <th></th>
           </tr>
         </thead>
-        <tbody ng-repeat="contenido in contenidos_traducciones">
+        <tbody dir-paginate="contenido in contenidos_traducciones | filter:q | itemsPerPage: pageSize" current-page="currentPage">
           <tr>
             <td>
               <p class="dp_infolabel ng-binding">
@@ -68,7 +80,7 @@
             <td class="alicent dp_actions">
               <a href="javascript:void(0)" class="smlinks" ng-click="myprep(contenido)"><i class="fa" ng-class="{'fa-star' : contenido.FK_Contenido != null, 'fa-star-o' : contenido.FK_Contenido == null}"></i> Favoritos</a>
               <a href="javascript:void(0)" class="smlinks" ng-click="modalAndCtrl(contenido)"><i class="fa fa-eye"></i> Ver</a>
-              <a href="javascript:void(0)" class="smlinks" ng-click="detalle(contenido, $index)"><i class="fa fa-file-sound-o"></i> Audio</a>
+              <a href="javascript:void(0)" class="smlinks" ng-click="detalle(contenido, $index)" ng-show="contenido.HasAudio"><i class="fa fa-file-sound-o"></i> Audio</a>
             </td>
           </tr>
           <!-- audios -->
@@ -83,7 +95,7 @@
                           <source ng-src="{{'http://swfideas.com/ci22/uploads/'+audio.Nombre}}" type="audio/mpeg">
                         Your browser does not support the audio element.
                         </audio>
-                        <a href="{{'http://swfideas.com/ci22/uploads/'+audio.Nombre}}" class="audio-download"
+                        <a ng-href="{{'http://swfideas.com/ci22/uploads/'+audio.Nombre}}" class="audio-download"
                            target="_self" download="{{audio.Nombre}}">
                           <i class="fa fa-download"></i>
                         </a>
@@ -107,6 +119,9 @@
 
   </div>
   <!--/table -->
+  <div class="one_full">
+      <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="js/Pagging/dirPagination.tpl.html"></dir-pagination-controls>
+  </div>
   <div class="margin_top1"></div>
 </div>
 

@@ -1,4 +1,4 @@
-angular.module('App',[	'ui.bootstrap',	'dialogs.main',	'ui.router',	'srph.timestamp-filter',	'vesparny.fancyModal',	'angularFileUpload',	'Controllers',	'angularUUID2'	])
+angular.module('App',[	'ui.bootstrap',	'dialogs.main',	'ui.router',	'srph.timestamp-filter',	'vesparny.fancyModal',	'angularFileUpload',	'Controllers',	'angularUUID2',	'angularUtils.directives.dirPagination'	])
 	.config(function($stateProvider, $urlRouterProvider){
 			$urlRouterProvider.otherwise('/Login');
 			$stateProvider

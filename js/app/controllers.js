@@ -147,7 +147,7 @@ angular.module('Controllers', [])
 
 })
 .controller('ContenidosController', function(
-  $scope, $rootScope, $http, $location, $fancyModal, $log, ContenidosService, $upload, dialogs, AuthService) {
+  $scope, $rootScope, $http, $location, $fancyModal, $log, ContenidosService, $upload, $anchorScroll, dialogs, AuthService) {
 
   $scope.list_categoria = {};
   $scope.selected_categoria = {};
@@ -162,6 +162,9 @@ angular.module('Controllers', [])
   $scope.rowvisible = -1;
   $scope.selectedAudios = [];
   //--/upload vars
+  $scope.currentPage = 1;
+  $scope.pageSize = 5;
+
   //SELECT ID
   $scope.edit = function(c) {
       //var cat_id = $scope.list_categoria.map(function (element) {return element.PK_Categoria;}).indexOf('78');
@@ -178,7 +181,7 @@ angular.module('Controllers', [])
         }]
       };
 
-      //$scope.selected_categoria = categoria;
+      $scope.gotoAnchor('New');
     };
     //SAVE
   $scope.save = function() {
@@ -444,6 +447,21 @@ angular.module('Controllers', [])
       dialogs.error('Error',error.data,{'windowClass':'center-modal'})
     });
   }
+
+  $scope.pageChangeHandler = function(num) {
+      console.log('Contenidos page changed to ' + num);
+  };
+
+  $scope.gotoAnchor = function(x) {
+    var newHash = 'Contenidos' + x;
+    $location.hash('');
+    if ($location.hash() !== newHash) {
+      $location.hash('Contenidos' + x);
+      $anchorScroll();
+    } else {
+      $anchorScroll();
+    }
+  };
 })
 
 .controller('ModalInstanceCtrl', function($scope, $modalInstance, items) {
@@ -696,10 +714,10 @@ angular.module('Controllers', [])
   //INSERT USER
   $scope.save = function () {
     UsuariosService.save($scope.usuario).then(function(response){
-      console.info('Saved '+response.data);
+      console.info('Saved ',response.data);
+      var result = response.data.result;
       if(response.data.op)
       {
-        var result = response.data.result;
         var insert = true;
         for (i in $scope.usuarios) {
           if($scope.usuarios[i].PK_Usuario == result.PK_Usuario){
@@ -716,7 +734,7 @@ angular.module('Controllers', [])
         $scope.clean();
 
       } else {
-        // ver que pedo con los response.data.errors
+        dialogs.notify('Información','Nombre de Usuario ya existente.',{'windowClass':'center-modal'});
       }
     }, function (error)
     {
@@ -842,7 +860,6 @@ angular.module('Controllers', [])
       dialogs.error('Error',error.data,{'windowClass':'center-modal'})
     });
   };
-
   // LOAD DATA
   $scope.refresh();
 })

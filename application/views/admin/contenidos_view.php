@@ -2,9 +2,9 @@
 <div class="content_fullwidth less2">
 
   <div class="container">
-    <div class="one_full" >
+    <div class="one_full">
 
-      <div class="dp_form1">
+      <div class="dp_form1" id="ContenidoNew">
         <form
         accept-charset="utf-8"
         class="sky-form" id="sky-form" name="skyform"
@@ -101,7 +101,20 @@
             <th></th>
           </tr>
         </thead>
-        <tbody ng-repeat="contenido in contenidos_traducciones">
+        <div class="row">
+          <div class="col-xs-4">
+            <h3>Página Actual: {{ currentPage }}</h3>
+          </div>
+          <div class="col-xs-4">
+            <label for="search">Buscar:</label>
+            <input ng-model="q" id="search" class="form-control" placeholder="Filter text">
+          </div>
+          <div class="col-xs-4">
+            <label for="search">Contenidos por página:</label>
+            <input type="number" min="1" max="100" class="form-control" ng-model="pageSize">
+          </div>
+        </div>
+        <tbody dir-paginate="contenido in contenidos_traducciones | filter:q | itemsPerPage: pageSize" current-page="currentPage">
           <tr>
             <td>
               <p class="dp_infolabel ng-binding">
@@ -223,6 +236,9 @@
 
   </div>
   <!--/table -->
+  <div class="one_full">
+      <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="js/Pagging/dirPagination.tpl.html"></dir-pagination-controls>
+  </div>
   <div class="margin_top1"></div>
   <!--
   <div class="one_half">
