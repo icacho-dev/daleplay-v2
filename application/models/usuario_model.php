@@ -20,11 +20,24 @@ class Usuario_model extends CI_Model {
 	   return $this->db->get('Usuario')->result_array();
 	}
 
-	function insert_usuario($data)
-	{
-		$this->db->insert('Usuario', $data);
-		return $this->db->insert_id() ;
-	}
+	function insert_usuario(& $data)
+	{		$this->db->select('PK_Usuario');
+		$this->db->from('Usuario');
+		$where = "Usuario.UserName = '" . $data['result']['UserName']."'";
+		$this->db->where($where);
+		$query = $this->db->get();
+		if ($query->num_rows() > 0)
+		{
+			$data['op'] = false;
+			$id = -1;
+		}
+		else {
+			$data['op'] = true;
+			$this->db->insert('Usuario', $data['result']);
+			$id = $this->db->insert_id() ;
+		}
+		return $id;
+	}	function edit_usuario(& $data , $id)	{		$this->db->select('PK_Usuario');		$this->db->from('Usuario');		$where = "Usuario.UserName = '" . $data['result']['UserName']."' AND Usuario.PK_Usuario != ".$id;		$this->db->where($where);		$query = $this->db->get();		if ($query->num_rows() > 0)		{			$data['op'] = false;		}		else{			$data['op'] = true;			$this->db->where('PK_Usuario', $id);			$this->db->update('Usuario', $data['result']);		}		return $id;	}
 
 	function insert_categoria_usuario($data)
 	{
@@ -32,13 +45,6 @@ class Usuario_model extends CI_Model {
 	  $this->db->insert_batch('Categorias_Usuario', $data);
 	  $this->db->trans_complete();
 	  return ($this->db->trans_status() === FALSE)? FALSE:TRUE;
-	}
-
-	function edit_usuario($data , $id)
-	{
-		$this->db->where('PK_Usuario', $id);
-		$this->db->update('Usuario', $data);
-		return $id;
 	}
 
 	function delete_usuario($id)

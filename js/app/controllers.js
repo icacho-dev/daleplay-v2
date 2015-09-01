@@ -696,10 +696,10 @@ angular.module('Controllers', [])
   //INSERT USER
   $scope.save = function () {
     UsuariosService.save($scope.usuario).then(function(response){
-      console.info('Saved '+response.data);
+      console.info('Saved ',response.data);
+      var result = response.data.result;
       if(response.data.op)
       {
-        var result = response.data.result;
         var insert = true;
         for (i in $scope.usuarios) {
           if($scope.usuarios[i].PK_Usuario == result.PK_Usuario){
@@ -716,7 +716,7 @@ angular.module('Controllers', [])
         $scope.clean();
 
       } else {
-        // ver que pedo con los response.data.errors
+        dialogs.notify('Información','Nombre de Usuario ya existente.',{'windowClass':'center-modal'});
       }
     }, function (error)
     {
