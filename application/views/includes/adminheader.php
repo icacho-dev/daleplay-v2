@@ -70,7 +70,11 @@
     <script src="//code.angularjs.org/1.2.25/angular-sanitize.min.js"></script>
   	<script src="<?php echo base_url();?>js/app/ui-bootstrap-tpls-0.12.0.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.8/angular-ui-router.min.js"></script>
-  	<script src="<?php echo base_url();?>js/app/angular-timestamp-filter.js"></script>
+
+    <script src="<?php echo base_url();?>js/Pagging/dirPagination.js"></script>
+    <script src="<?php echo base_url();?>js/Pagging/style.css"></script>
+
+    <script src="<?php echo base_url();?>js/app/angular-timestamp-filter.js"></script>
   	<script src="<?php echo base_url();?>js/angular-fancy-modal/angular-fancy-modal.min.js"></script>
   	<script src="<?php echo base_url();?>js/angular-file-upload/angular-file-upload-shim.min.js"></script>
   	<script src="<?php echo base_url();?>js/angular-file-upload/angular-file-upload.min.js"></script>

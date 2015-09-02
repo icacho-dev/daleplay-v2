@@ -43,8 +43,7 @@ class Usuario_controller extends CI_Controller {
 		$data = json_decode(file_get_contents('php://input'), true);
 
 		$arr = array(
-				'result' => array(
-					'UserName' => $data['UserName'] ,
+				'result' => array(					'UserName' => $data['UserName'] ,
 					'Email' => $data['Email'] ,
 					'Telefono' => isset($data['Telefono']) ? $data['Telefono'] : '',
 					'EsAdmin' =>  isset($data['EsAdmin']) ? $data['EsAdmin'] : 'false',
@@ -54,13 +53,10 @@ class Usuario_controller extends CI_Controller {
 				'errors' => '',
 				'op' => true
 		);
-
-		$arr['result']['PK_Usuario'] =
-				(!isset($data['PK_Usuario']))
-					? $this->Usuario_model->insert_usuario($arr['result'])
-					: $this->Usuario_model->edit_usuario($arr['result'] , $data['PK_Usuario'])
-					;
-
+		if (!isset($data['PK_Usuario']))		{			$arr['result']['PK_Usuario'] = $this->Usuario_model->insert_usuario($arr);		}		else {
+			$arr['result']['PK_Usuario'] = $this->Usuario_model->edit_usuario($arr, $data['PK_Usuario']);
+		}
+
 		echo json_encode($arr);
 	}
 

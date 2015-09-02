@@ -41,7 +41,20 @@
             <th></th>
           </tr>
         </thead>
-        <tbody ng-repeat="contenido in contenidos_traducciones">
+        <div class="row">
+          <div class="col-xs-4">
+            <h3>Página Actual: {{ currentPage }}</h3>
+          </div>
+          <div class="col-xs-4">
+            <label for="search">Buscar:</label>
+            <input ng-model="q" id="search" class="form-control" placeholder="Filter text">
+          </div>
+          <div class="col-xs-4">
+            <label for="search">Contenidos por página:</label>
+            <input type="number" min="1" max="100" class="form-control" ng-model="pageSize">
+          </div>
+        </div>
+        <tbody dir-paginate="contenido in contenidos_traducciones | filter:q | itemsPerPage: pageSize" current-page="currentPage">
           <tr>
             <td>
               <p class="dp_infolabel ng-binding">
@@ -56,7 +69,7 @@
             </td>
             <td class="alicent dp_actions">
               <a href="javascript:void(0)" class="smlinks" ng-click="modalAndCtrl(contenido)"><i class="fa fa-eye"></i> Ver</a>
-              <a href="javascript:void(0)" class="smlinks" ng-click="detalle(contenido, $index)"><i class="fa fa-file-sound-o"></i> Audio</a>
+              <a href="javascript:void(0)" class="smlinks" ng-click="detalle(contenido, $index)" ng-show="contenido.HasAudio"><i class="fa fa-file-sound-o"></i> Audio</a>
             </td>
           </tr>
           <!-- audios -->
@@ -91,6 +104,9 @@
 
   </div>
   <!--/table -->
+  <div class="one_full">
+      <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="js/Pagging/dirPagination.tpl.html"></dir-pagination-controls>
+  </div>
   <div class="margin_top1"></div>
 </div>
 
