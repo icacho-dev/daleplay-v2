@@ -4,7 +4,7 @@
   <div class="container">
     <div class="one_full">
 
-      <div class="dp_form1" id="ContenidoNew">
+      <div class="dp_form1" id="ContenidosNew">
         <form
         accept-charset="utf-8"
         class="sky-form" id="sky-form" name="skyform"

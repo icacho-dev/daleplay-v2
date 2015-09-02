@@ -3477,6 +3477,9 @@ ul.post_meta_links_small {
 
 
 /* pagination */
+.pagination > li {
+	display: inline;
+}
 .pagination.center {
 	text-align: center;
 }
